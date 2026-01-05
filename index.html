@@ -251,8 +251,7 @@
             z-index: 80; 
             display: none; 
             pointer-events: auto; cursor: pointer; 
-            /* La transición se aplica a 'left' (movimiento) */
-            transition: left linear; 
+            /* Importante: NO poner transición aquí, la manejamos en JS para evitar bugs */
         }
 
         body.stardew-mode #stardew-dog { display: block; }
@@ -262,16 +261,13 @@
 
         /* 1. SENTADO BAJANDO (Se ejecuta 1 vez y para) */
         .dog-state-sit-start {
-            background-position-y: -128px; /* Fila de sentarse */
-            /* steps(4) normal, pero 'forwards' para que se quede en el ultimo frame si quisiera, 
-               aunque lo cambiamos rapido con JS */
+            background-position-y: -128px; 
             animation: spriteAnim4Frames 0.5s steps(4) 1 forwards;
         }
 
         /* 2. SENTADO IDLE (Bucle de los ultimos 2 frames) */
         .dog-state-sit-idle {
             background-position-y: -128px;
-            /* Animamos solo background-position-x entre -64px y -96px (frames 3 y 4) */
             animation: spriteSitIdleLoop 0.8s steps(2) infinite;
         }
 
@@ -281,10 +277,9 @@
             animation: spriteAnim4Frames 0.6s steps(4) infinite;
         }
 
-        /* 4. CORRIENDO (Run) - ULTIMA FILA (aprox -288px si son 32px * 9 filas) 
-           La ultima fila tiene 3 frames. */
+        /* 4. CORRIENDO (Run) - ULTIMA FILA */
         .dog-state-run {
-            background-position-y: -288px; /* Ajuste para la ultima fila */
+            background-position-y: -288px; 
             animation: spriteAnim3Frames 0.4s steps(3) infinite;
         }
 
@@ -296,10 +291,9 @@
 
         /* KEYFRAMES */
         @keyframes spriteAnim4Frames { from { background-position-x: 0; } to { background-position-x: -128px; } }
-        @keyframes spriteAnim3Frames { from { background-position-x: 0; } to { background-position-x: -96px; } } /* Para correr (3 frames) */
+        @keyframes spriteAnim3Frames { from { background-position-x: 0; } to { background-position-x: -96px; } } 
         @keyframes spriteAnim2Frames { from { background-position-x: 0; } to { background-position-x: -64px; } }
         
-        /* Keyframe especial para el bucle de sentado (frames 3 y 4) */
         @keyframes spriteSitIdleLoop { 
             from { background-position-x: -64px; } 
             to { background-position-x: -128px; } 
@@ -434,6 +428,7 @@
         let dogPos = 10; 
         let targetPos = 10; 
         let isMoving = false;
+        let moveTimer = null; // Timer para cancelar movimientos
 
         function updateDogAI() {
             if (!isStardewMode) return; 
@@ -452,48 +447,64 @@
                     changeDogState('sleep');
                 } else if (rand < 0.1) {
                     // 8% chance de moverse (Caminar o Correr)
-                    // Elige un punto al azar
-                    targetPos = Math.random() * 80 + 5; 
+                    const newTarget = Math.random() * 80 + 5; 
                     
                     // 50/50 chance de correr o caminar
                     const runChance = Math.random() > 0.5;
                     
                     if (runChance) {
-                        changeDogState('run');
-                        dog.style.transition = "left 1.5s linear"; // Velocidad rapida
-                        setTimeout(() => stopDog(), 1500); // Frena en 1.5s
+                        initMove(newTarget, 'run', 1.5);
                     } else {
-                        changeDogState('walk');
-                        dog.style.transition = "left 4s linear"; // Velocidad lenta
-                        setTimeout(() => stopDog(), 4000); // Frena en 4s
+                        initMove(newTarget, 'walk', 4.0);
                     }
-                    isMoving = true;
-                    moveDog();
                 }
             }
         }
 
-        function moveDog() {
-            if (!isMoving) return;
-            const direction = targetPos > dogPos ? 1 : -1; 
+        // Nueva función centralizada para iniciar movimientos sin bugs
+        function initMove(newTargetPos, mode, durationSec) {
+            // 1. Limpiar cualquier movimiento anterior
+            if(moveTimer) clearTimeout(moveTimer);
+            
+            // 2. Calcular posición actual exacta para que no salte
+            const currentRect = dog.getBoundingClientRect();
+            const startPx = currentRect.left;
+            
+            // 3. Forzar al perro a quedarse donde está visualmente
+            dog.style.transition = 'none';
+            dog.style.left = startPx + 'px';
+            
+            // 4. Forzar al navegador a aplicar el cambio (Reflow)
+            void dog.offsetWidth;
+
+            // 5. Configurar el nuevo destino
+            targetPos = newTargetPos;
+            isMoving = true;
+            
+            // 6. Mirar a la dirección correcta
+            const currentPosPercent = (startPx / window.innerWidth) * 100;
+            const direction = targetPos > currentPosPercent ? 1 : -1; 
             if (direction === 1) dog.classList.remove('dog-flip');
             else dog.classList.add('dog-flip');
+
+            // 7. Cambiar estado y activar transición
+            changeDogState(mode);
+            dog.style.transition = `left ${durationSec}s linear`;
             dog.style.left = targetPos + 'vw';
             dogPos = targetPos;
-        }
 
-        function stopDog() {
-            isMoving = false;
-            sitDogDown();
+            // 8. Programar la parada
+            moveTimer = setTimeout(() => {
+                isMoving = false;
+                sitDogDown();
+            }, durationSec * 1000);
         }
 
         // Función especial para sentarse: Baja y luego se queda quieto
         function sitDogDown() {
-            // Paso 1: Animación de bajar
+            if(moveTimer) clearTimeout(moveTimer); // Cancelar movimiento si había
             changeDogState('sit-start');
-            // Paso 2: Después de 0.5s, cambiar a idle (bucle de respirar)
             setTimeout(() => {
-                // Solo cambiar si sigue en sit-start (por si hubo un click entre medio)
                 if (dog.classList.contains('dog-state-sit-start')) {
                     changeDogState('sit-idle');
                 }
@@ -503,26 +514,32 @@
         function changeDogState(newState) {
             dogState = newState;
             dog.className = ''; 
-            if (isMoving && targetPos < dogPos) dog.classList.add('dog-flip'); 
+            // Mantener volteado si estaba moviéndose a la izquierda
+            if (targetPos < dogPos) dog.classList.add('dog-flip'); 
             dog.classList.add('dog-state-' + newState);
         }
 
         // INTERACCIÓN CLICK
         dog.addEventListener('click', () => {
-            // Si está sentado (en cualquiera de las 2 fases) o durmiendo -> ¡A CORRER!
-            if (dogState === 'sit-idle' || dogState === 'sit-start' || dogState === 'sleep') {
-                targetPos = Math.random() * 80 + 5; 
-                changeDogState('run');
-                isMoving = true;
-                dog.style.transition = "left 1.5s linear";
-                moveDog();
-                setTimeout(() => stopDog(), 1500);
+            // Cancelar cualquier plan previo del perro
+            if(moveTimer) clearTimeout(moveTimer);
+
+            // Si está quieto (sentado o durmiendo) -> ¡A CORRER!
+            if (!isMoving) {
+                const newTarget = Math.random() * 80 + 5; 
+                initMove(newTarget, 'run', 1.0); // 1.0s veloz
             } 
-            // Si ya se estaba moviendo, frenarlo
-            else if (dogState === 'walk' || dogState === 'run') {
+            // Si ya se estaba moviendo -> FRENAR EN SECO
+            else {
                  const computedStyle = window.getComputedStyle(dog);
-                 dogPos = parseFloat(computedStyle.left) / window.innerWidth * 100;
-                 dog.style.left = dogPos + 'vw';
+                 const currentPx = parseFloat(computedStyle.left);
+                 dog.style.transition = 'none';
+                 dog.style.left = currentPx + 'px';
+                 
+                 // Actualizar la variable lógica de posición
+                 dogPos = (currentPx / window.innerWidth) * 100;
+                 targetPos = dogPos; // Para que no se voltee solo
+                 
                  isMoving = false;
                  sitDogDown();
             }
@@ -603,7 +620,7 @@
         function lanzarConfeti(x, y) { const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500']; if (!x) x = window.innerWidth / 2; if (!y) y = window.innerHeight / 2; for (let j = 0; j < 20; j++) { const confeti = document.createElement('div'); confeti.classList.add('confetti'); confeti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]; confeti.style.left = x + 'px'; confeti.style.top = y + 'px'; const dirX = (Math.random() - 0.5) * 200 + 'px'; const dirY = (Math.random() - 1) * 200 + 'px'; confeti.style.setProperty('--x', dirX); confeti.style.setProperty('--y', dirY); confeti.style.animation = `pop ${Math.random() * 0.5 + 0.5}s ease-out forwards`; document.body.appendChild(confeti); setTimeout(() => { confeti.remove(); }, 1000); } }
         function lanzarSorpresa() { lanzarFrase(); lanzarConfeti(window.innerWidth/2, window.innerHeight * 0.8); }
         function lanzarFrase() { const container = document.getElementById("frase-flotante-container"); const el = document.createElement("div"); el.classList.add("frase-flotante"); el.innerText = frases[Math.floor(Math.random() * frases.length)]; el.style.left = (Math.random() * 30 - 15) + "%"; el.style.top = "60%"; container.appendChild(el); setTimeout(() => { el.remove(); }, 4000); }
-        function calcularProximasFechas() { const lista = document.getElementById("lista-fechas"); lista.innerHTML = ""; const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; let hoy = new Date(); for(let i = 0; i < 4; i++) { let mesActual = hoy.getMonth() + i; let anioActual = hoy.getFullYear(); if (mesActual > 11) { mesActual -= 12; anioActual++; } let fechaFutura = new Date(anioActual, mesActual, 5); if (fechaFutura < new Date()) fechaFutura = new Date(anioActual, mesActual + 1, 5); const item = document.createElement("li"); item.classList.add("date-item"); item.innerHTML = `<span>5 de ${meses[fechaFutura.getMonth()]}</span> <span style="font-weight:bold; color:var(--primary-color)">${dias[fechaFutura.getDay()]}</span>`; lista.appendChild(item); } }
+        function calcularProximasFechas() { const lista = document.getElementById("lista-fechas"); lista.innerHTML = ""; const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; let hoy = new Date(); for(let i = 0; i < 4; i++) { let mesActual = hoy.getMonth() + i; let anioActual = hoy.getFullYear(); if (mesActual > 11) { mesActual -= 12; anioActual++; } let fechaFutura = new Date(anioActual, mesActual, 5); if (fechaFutura < new Date()) fechaFutura = new Date(anioActual, mesActual + 1, 5); const item = document.createElement("li"); item.classList.add("date-item"); item.innerHTML = `<span>5 de ${mesesNombres[fechaFutura.getMonth()]}</span> <span style="font-weight:bold; color:var(--primary-color)">${dias[fechaFutura.getDay()]}</span>`; lista.appendChild(item); } }
         function generarCita() { const display = document.getElementById("idea-display"); display.style.opacity = 0; setTimeout(() => { display.innerText = ideasCitas[Math.floor(Math.random() * ideasCitas.length)]; display.style.opacity = 1; }, 200); }
         const fechaInicio = new Date("2023-03-05T00:00:00"); function actualizarContador() { const ahora = new Date(); const diferencia = ahora - fechaInicio; const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)); const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60)); const segundos = Math.floor((diferencia % (1000 * 60)) / 1000); const anios = Math.floor(dias / 365); const diasRestantes = dias % 365; document.getElementById("contador").innerHTML = `LLEVAMOS: ${anios} AÑOS, ${diasRestantes} DÍAS, ${horas} HS, ${minutos} MIN Y ${segundos} SEG`; } setInterval(actualizarContador, 1000); crearCorazones();
 

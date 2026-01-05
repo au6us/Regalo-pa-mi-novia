@@ -256,7 +256,7 @@
             
             /* La transición se aplica SÓLO al movimiento (left) */
             /* Evitamos que 'background-position' tenga transición para que no se vea el "barrido" de sprites */
-            transition: left linear; 
+            /* IMPORTANTE: La transición se maneja desde JS para poder "cortarla" cuando para */
         }
 
         body.stardew-mode #stardew-dog { display: block; }
@@ -284,7 +284,7 @@
 
         /* 4. CORRIENDO (Run) - ULTIMA FILA */
         .dog-state-run {
-            background-position-y: -288px; 
+            background-position-y: -288px; /* Ajustado para la ultima fila */
             animation: spriteAnim3Frames 0.4s steps(3) infinite;
         }
 
@@ -479,9 +479,11 @@
             dogPos = targetPos;
             isMoving = true;
 
-            // Agendar la parada
+            // Agendar la parada con LIMPIEZA DE TRANSICION
             setTimeout(() => {
                 isMoving = false;
+                // ESTA LÍNEA ES MAGIA: Mata el movimiento para que no se deslice después
+                dog.style.transition = 'none'; 
                 sitDogDown();
             }, duration * 1000);
         }

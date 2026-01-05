@@ -179,7 +179,7 @@
         body.stardew-mode .btn-frases, body.stardew-mode .btn-idea, body.stardew-mode .btn-entrar {
             border-radius: 5px; border: 3px solid #3e0e00; box-shadow: 4px 4px 0 #000;
         }
-        .btn-frases:hover, .btn-idea:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-frases:hover, .btn-idea:hover, .btn-entrar:hover { transform: scale(1.05); filter: brightness(1.1); }
         
         .btn-frases { margin-top: 60px; /* Separación pedida */ }
 
@@ -190,11 +190,17 @@
         .bottom-right { bottom: 20px; right: 20px; transform: rotate(15deg); }
         .corner-sticker:hover { transform: scale(1.3); }
 
-        /* Pantalla de bloqueo */
+        /* Pantalla de bloqueo - NUEVOS ESTILOS */
         #pantalla-bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 240, 245, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
-        .caja-login { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid #ffb6c1; max-width: 90%; }
-        .input-fecha { padding: 10px; font-size: 1.2rem; border-radius: 10px; border: 2px solid #d63384; margin-top: 15px; outline: none; text-align: center; color: #d63384; font-family: 'Fredoka', sans-serif; }
+        .caja-login { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid #ffb6c1; max-width: 90%; text-align: center; }
         
+        /* Estilos para los 3 inputs de fecha */
+        .fecha-inputs-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
+        .input-fecha-small { width: 60px; padding: 10px; font-size: 1.2rem; border-radius: 10px; border: 2px solid #d63384; outline: none; text-align: center; color: #d63384; font-family: 'Fredoka', sans-serif; }
+        .input-anio { width: 80px; } /* El año es un poco más ancho */
+        /* Quitar flechitas de los inputs number */
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
         /* Reproductor */
         #music-player-box {
             position: fixed; bottom: 20px; right: 20px;
@@ -242,12 +248,20 @@
 
     <div id="pantalla-bloqueo">
         <div class="caja-login">
-            <h1 style="font-size: 2rem; margin-top: 0; text-transform: uppercase;">🔒 Tenes que desbloquear la pagina</h1>
-            <p>Ingresa la fecha (dd/mm/aaaa)</p>
-            <input type="text" id="input-fecha" class="input-fecha" placeholder="00/00/0000">
+            <h1 style="font-size: 2rem; margin-top: 0; text-transform: uppercase;">🔒 TENES QUE DESBLOQUEAR LA PAGINA 🔒</h1>
+            <p>Ingresa la fecha (Día / Mes / Año)</p>
+            
+            <div class="fecha-inputs-container">
+                <input type="number" id="input-dia" class="input-fecha-small" placeholder="DD" min="1" max="31">
+                <span style="font-size: 1.5rem; color: var(--primary-color)">/</span>
+                <input type="number" id="input-mes" class="input-fecha-small" placeholder="MM" min="1" max="12">
+                <span style="font-size: 1.5rem; color: var(--primary-color)">/</span>
+                <input type="number" id="input-anio" class="input-fecha-small input-anio" placeholder="AAAA" min="2020">
+            </div>
+
             <br>
-            <button class="btn-entrar" onclick="verificarFecha()">ENTRAR ❤️</button>
-            <p id="mensaje-error" style="color:red; display:none; margin-top:10px;">Ups, esa no es. Pista: es una fecha muy especial jeje</p>
+            <button class="btn-entrar" style="margin-top: 25px;" onclick="verificarFecha()">ENTRAR ❤️</button>
+            <p id="mensaje-error" style="color:red; display:none; margin-top:20px;">Ups, esa no es. Pista: es una fecha muy especial jeje</p>
         </div>
     </div>
 
@@ -273,7 +287,7 @@
         </div>
 
         <div class="container">
-            <h1>💗¡FELIZ MES JUNTOS AMOOR!💗</h1>
+            <h1>💗 ¡FELIZ MES JUNTOS, AMOR! 💗</h1>
             <div id="contador">Calculando...</div>
             
             <div class="gallery" id="gallery-normal">
@@ -435,8 +449,8 @@ Sos mi negrita hermosa y te elijo todos los días.
                 galleryStardew.style.display = "flex";
                 
                 // CAMBIAR TEXTO DE LA RADIO PARA STARDEW
-                radioTitle.innerText = "RADIO FRIKI 🐔";
-                radioSubtitle.innerText = "musiquita friki random";
+                radioTitle.innerText = "RADIO STARDEW 🐔";
+                radioSubtitle.innerText = "Musiquita para la granja";
                 
                 currentPlaylist = playlistStardew;
                 currentIdx = 0;
@@ -465,7 +479,8 @@ Sos mi negrita hermosa y te elijo todos los días.
         /* --- OBJETOS LATERALES --- */
         function iniciarSideItems() { setInterval(crearSideItem, 800); }
         
-        const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋"];
+        // AGREGADOS FLORES Y CORAZONES DE COLORES
+        const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋", "🌸", "🌹", "🌷", "💐", "❤️", "🧡", "💛", "💚", "💙", "💜", "🤍"];
         const emojisStardew = ["🌾", "🐔", "⭐", "🍄", "🌲"];
 
         function crearSideItem() {
@@ -492,10 +507,20 @@ Sos mi negrita hermosa y te elijo todos los días.
 
 
         /* --- FUNCIONES GENERALES --- */
+        // NUEVA FUNCIÓN VERIFICAR FECHA (para los 3 inputs)
         function verificarFecha() {
-            const input = document.getElementById("input-fecha").value;
+            let dia = document.getElementById("input-dia").value;
+            let mes = document.getElementById("input-mes").value;
+            const anio = document.getElementById("input-anio").value;
             const error = document.getElementById("mensaje-error");
-            if (input === fechaCorrecta) {
+
+            // Asegurar que día y mes tengan 2 dígitos (ej: convierte "5" en "05")
+            dia = dia.padStart(2, '0');
+            mes = mes.padStart(2, '0');
+
+            const fechaIngresada = `${dia}/${mes}/${anio}`;
+
+            if (fechaIngresada === fechaCorrecta) {
                 document.getElementById("pantalla-bloqueo").style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById("pantalla-bloqueo").style.display = "none";
@@ -621,4 +646,3 @@ Sos mi negrita hermosa y te elijo todos los días.
     </script>
 </body>
 </html>
-

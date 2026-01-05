@@ -250,8 +250,13 @@
             transform-origin: bottom center;
             z-index: 80; 
             display: none; 
-            pointer-events: auto; cursor: pointer; 
-            /* Importante: NO poner transición aquí, la manejamos en JS para evitar bugs */
+            
+            /* --- CLAVE PARA QUE NO HAYA BUGS: NO INTERACTUABLE --- */
+            pointer-events: none; 
+            
+            /* La transición se aplica SÓLO al movimiento (left) */
+            /* Evitamos que 'background-position' tenga transición para que no se vea el "barrido" de sprites */
+            transition: left linear; 
         }
 
         body.stardew-mode #stardew-dog { display: block; }
@@ -422,16 +427,18 @@
         let currentPlaylist = playlistNormal;
         let isStardewMode = false;
 
-        /* --- LÓGICA DEL PERRO (Inteligencia Artificial Canina) --- */
+        /* --- LÓGICA DEL PERRO (AUTÓNOMA SIN CLICKS) --- */
         const dog = document.getElementById('stardew-dog');
-        let dogState = 'sit-idle'; // Estado inicial
+        let dogState = 'sit-idle'; 
         let dogPos = 10; 
         let targetPos = 10; 
         let isMoving = false;
-        let moveTimer = null; // Timer para cancelar movimientos
 
         function updateDogAI() {
             if (!isStardewMode) return; 
+
+            // Si se está moviendo, no interrumpir NUNCA.
+            if (isMoving) return;
 
             // Si está durmiendo, 2% chance de despertar
             if (dogState === 'sleep') {
@@ -439,72 +446,51 @@
                 return;
             }
 
-            // Si está sentado (idle), decide qué hacer
-            if (dogState === 'sit-idle' && !isMoving) {
+            // Si está sentado (idle) y quieto
+            if (dogState === 'sit-idle') {
                 const rand = Math.random();
                 if (rand < 0.02) {
                     // 2% chance de dormir
                     changeDogState('sleep');
                 } else if (rand < 0.1) {
-                    // 8% chance de moverse (Caminar o Correr)
-                    const newTarget = Math.random() * 80 + 5; 
-                    
-                    // 50/50 chance de correr o caminar
-                    const runChance = Math.random() > 0.5;
-                    
-                    if (runChance) {
-                        initMove(newTarget, 'run', 1.5);
-                    } else {
-                        initMove(newTarget, 'walk', 4.0);
-                    }
+                    // 8% chance de moverse
+                    startMove();
                 }
             }
         }
 
-        // Nueva función centralizada para iniciar movimientos sin bugs
-        function initMove(newTargetPos, mode, durationSec) {
-            // 1. Limpiar cualquier movimiento anterior
-            if(moveTimer) clearTimeout(moveTimer);
+        function startMove() {
+            targetPos = Math.random() * 80 + 5; 
             
-            // 2. Calcular posición actual exacta para que no salte
-            const currentRect = dog.getBoundingClientRect();
-            const startPx = currentRect.left;
-            
-            // 3. Forzar al perro a quedarse donde está visualmente
-            dog.style.transition = 'none';
-            dog.style.left = startPx + 'px';
-            
-            // 4. Forzar al navegador a aplicar el cambio (Reflow)
-            void dog.offsetWidth;
+            // Determinar si corre o camina
+            const runChance = Math.random() > 0.5;
+            const duration = runChance ? 1.5 : 4.0;
+            const mode = runChance ? 'run' : 'walk';
 
-            // 5. Configurar el nuevo destino
-            targetPos = newTargetPos;
-            isMoving = true;
-            
-            // 6. Mirar a la dirección correcta
-            const currentPosPercent = (startPx / window.innerWidth) * 100;
-            const direction = targetPos > currentPosPercent ? 1 : -1; 
+            // Mirar a la dirección correcta
+            const direction = targetPos > dogPos ? 1 : -1; 
             if (direction === 1) dog.classList.remove('dog-flip');
             else dog.classList.add('dog-flip');
 
-            // 7. Cambiar estado y activar transición
+            // Iniciar movimiento
             changeDogState(mode);
-            dog.style.transition = `left ${durationSec}s linear`;
+            dog.style.transition = `left ${duration}s linear`;
             dog.style.left = targetPos + 'vw';
             dogPos = targetPos;
+            isMoving = true;
 
-            // 8. Programar la parada
-            moveTimer = setTimeout(() => {
+            // Agendar la parada
+            setTimeout(() => {
                 isMoving = false;
                 sitDogDown();
-            }, durationSec * 1000);
+            }, duration * 1000);
         }
 
-        // Función especial para sentarse: Baja y luego se queda quieto
+        // Función para sentarse suavemente
         function sitDogDown() {
-            if(moveTimer) clearTimeout(moveTimer); // Cancelar movimiento si había
             changeDogState('sit-start');
             setTimeout(() => {
+                // Solo pasar a idle si seguimos en sit-start
                 if (dog.classList.contains('dog-state-sit-start')) {
                     changeDogState('sit-idle');
                 }
@@ -514,36 +500,10 @@
         function changeDogState(newState) {
             dogState = newState;
             dog.className = ''; 
-            // Mantener volteado si estaba moviéndose a la izquierda
-            if (targetPos < dogPos) dog.classList.add('dog-flip'); 
+            // Mantener volteado si la última acción fue a la izquierda
+            if (targetPos < dogPos || (isMoving && targetPos < dogPos)) dog.classList.add('dog-flip'); 
             dog.classList.add('dog-state-' + newState);
         }
-
-        // INTERACCIÓN CLICK
-        dog.addEventListener('click', () => {
-            // Cancelar cualquier plan previo del perro
-            if(moveTimer) clearTimeout(moveTimer);
-
-            // Si está quieto (sentado o durmiendo) -> ¡A CORRER!
-            if (!isMoving) {
-                const newTarget = Math.random() * 80 + 5; 
-                initMove(newTarget, 'run', 1.0); // 1.0s veloz
-            } 
-            // Si ya se estaba moviendo -> FRENAR EN SECO
-            else {
-                 const computedStyle = window.getComputedStyle(dog);
-                 const currentPx = parseFloat(computedStyle.left);
-                 dog.style.transition = 'none';
-                 dog.style.left = currentPx + 'px';
-                 
-                 // Actualizar la variable lógica de posición
-                 dogPos = (currentPx / window.innerWidth) * 100;
-                 targetPos = dogPos; // Para que no se voltee solo
-                 
-                 isMoving = false;
-                 sitDogDown();
-            }
-        });
 
         setInterval(updateDogAI, 1000);
 
@@ -568,6 +528,9 @@
                 galleryNormal.style.display = "none"; galleryStardew.style.display = "flex";
                 radioTitle.innerText = "RADIO STARDEW 🐔"; radioSubtitle.innerText = "Musiquita para la granja";
                 currentPlaylist = playlistStardew;
+                
+                // Resetear perro al entrar al modo
+                dog.style.transition = 'none'; // Quitar transición para reset inmediato
                 sitDogDown(); isMoving = false;
 
             } else {

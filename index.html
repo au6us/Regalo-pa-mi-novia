@@ -190,15 +190,24 @@
         .bottom-right { bottom: 20px; right: 20px; transform: rotate(15deg); }
         .corner-sticker:hover { transform: scale(1.3); }
 
-        /* Pantalla de bloqueo - NUEVOS ESTILOS */
-        #pantalla-bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 240, 245, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
-        .caja-login { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid #ffb6c1; max-width: 90%; text-align: center; }
+        /* Pantalla de bloqueo - FONDO TRANSPARENTE PARA VER EMOJIS */
+        #pantalla-bloqueo { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: transparent; /* TRANSPARENTE PARA VER EL FONDO ANIMADO */
+            backdrop-filter: blur(2px); /* PEQUEÑO DESENFOQUE OPCIONAL */
+            z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 1s ease; 
+        }
+        .caja-login { 
+            background: white; padding: 40px; border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            border: 3px solid #ffb6c1; max-width: 90%; text-align: center; 
+        }
         
         /* Estilos para los 3 inputs de fecha */
         .fecha-inputs-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
         .input-fecha-small { width: 60px; padding: 10px; font-size: 1.2rem; border-radius: 10px; border: 2px solid #d63384; outline: none; text-align: center; color: #d63384; font-family: 'Fredoka', sans-serif; }
-        .input-anio { width: 80px; } /* El año es un poco más ancho */
-        /* Quitar flechitas de los inputs number */
+        .input-anio { width: 80px; } 
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
         /* Reproductor */
@@ -229,7 +238,7 @@
         .confetti { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 999; opacity: 0; }
         @keyframes pop { 0% { transform: translate(0, 0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; } }
 
-        /* Corazones fondo - MODIFICADO PARA VARIEDAD */
+        /* Corazones/Flores fondo */
         .heart-bg { position: fixed; color: #ffb6c1; font-size: 2rem; user-select: none; z-index: 1; cursor: pointer; transform-style: preserve-3d; transition: opacity 0.5s; }
         body.stardew-mode .heart-bg { display: none; }
 
@@ -240,6 +249,8 @@
 
     <div class="bg-tunnel"></div>
     <div class="bg-stardew"></div>
+    
+    <div id="hearts-container"></div>
 
     <button id="btn-toggle-mode" onclick="cambiarModo()">🌾 Modo Stardew</button>
 
@@ -266,7 +277,6 @@
     </div>
 
     <div id="contenido-principal" style="opacity: 0; transition: opacity 2s ease;">
-        <div id="hearts-container"></div>
         <div id="frase-flotante-container"></div>
         <div id="side-items-container"></div>
         <div id="youtube-player"></div>
@@ -527,7 +537,7 @@ Sos mi negrita hermosa y te elijo todos los días.
                     iniciarMecanografia();
                     if(player) player.playVideo();
                     iniciarSideItems();
-                    crearCorazones(); // AHORA ESTA FUNCIÓN USA LOS EMOJIS VARIADOS
+                    // crearCorazones() YA NO SE LLAMA AQUI PORQUE YA ESTA CORRIENDO DESDE EL PRINCIPIO
                     calcularProximasFechas();
                 }, 1000);
             } else {
@@ -553,7 +563,7 @@ Sos mi negrita hermosa y te elijo todos los días.
             // Usamos la misma lista variada que los objetos laterales
             const listaEmojis = emojisNormal;
 
-            for (let i = 0; i < 30; i++) { // Aumenté un poco la cantidad para más color
+            for (let i = 0; i < 30; i++) { 
                 const heart = document.createElement("div"); heart.classList.add("heart-bg");
                 
                 // ELIGE UN EMOJI AL AZAR DE LA LISTA VARIADA
@@ -631,6 +641,9 @@ Sos mi negrita hermosa y te elijo todos los días.
             document.getElementById("contador").innerHTML = `LLEVAMOS: ${anios} AÑOS, ${diasRestantes} DÍAS, ${horas} HS, ${minutos} MIN Y ${segundos} SEG`;
         }
         setInterval(actualizarContador, 1000);
+
+        // ARRANCAMOS LA FIESTA DE EMOJIS DESDE EL PRINCIPIO
+        crearCorazones();
 
         let player; let currentIdx = 0; let isPlaying = false;
         function onYouTubeIframeAPIReady() {

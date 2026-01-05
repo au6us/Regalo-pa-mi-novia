@@ -72,13 +72,17 @@
         body.stardew-mode .bg-tunnel { opacity: 0; }
         body.stardew-mode .bg-stardew { opacity: 1; }
 
-        /* --- BOTÓN DE MODO --- */
+        /* --- BOTÓN DE MODO (MODIFICADO PARA ESTAR OCULTO AL INICIO) --- */
         #btn-toggle-mode {
             position: fixed; top: 20px; left: 20px; z-index: 2000;
             background: white; border: 2px solid #5a2a2a;
             padding: 10px 15px; border-radius: 10px; cursor: pointer;
             font-family: 'Fredoka', sans-serif; font-weight: bold;
-            box-shadow: 0 4px 0 #5a2a2a; transition: transform 0.1s;
+            box-shadow: 0 4px 0 #5a2a2a; 
+            
+            /* MODIFICACIÓN: Se agrega transición de opacidad y se oculta inicialmente */
+            transition: transform 0.1s, opacity 2s ease;
+            opacity: 0; pointer-events: none;
         }
         #btn-toggle-mode:active { transform: translateY(4px); box-shadow: 0 0 0; }
         
@@ -531,6 +535,12 @@ Sos mi negrita hermosa y te elijo todos los días.
 
             if (fechaIngresada === fechaCorrecta) {
                 document.getElementById("pantalla-bloqueo").style.opacity = "0";
+                
+                // MOSTRAR EL BOTÓN DE MODO SUAVEMENTE
+                const btnMode = document.getElementById("btn-toggle-mode");
+                btnMode.style.opacity = "1";
+                btnMode.style.pointerEvents = "auto";
+
                 setTimeout(() => {
                     document.getElementById("pantalla-bloqueo").style.display = "none";
                     document.getElementById("contenido-principal").style.opacity = "1";
@@ -555,20 +565,15 @@ Sos mi negrita hermosa y te elijo todos los días.
             } else { document.getElementById("cursor-carta").style.display = "none"; }
         }
 
-        // FUNCIÓN MODIFICADA PARA USAR EMOJIS VARIADOS EN EL FONDO
+        // FUNCIÓN PARA EMOJIS VARIADOS EN EL FONDO
         function crearCorazones() {
             const container = document.getElementById("hearts-container");
             container.innerHTML = "";
-            
-            // Usamos la misma lista variada que los objetos laterales
             const listaEmojis = emojisNormal;
 
             for (let i = 0; i < 30; i++) { 
                 const heart = document.createElement("div"); heart.classList.add("heart-bg");
-                
-                // ELIGE UN EMOJI AL AZAR DE LA LISTA VARIADA
                 heart.innerHTML = listaEmojis[Math.floor(Math.random() * listaEmojis.length)];
-                
                 heart.style.left = Math.random() * 95 + "vw"; heart.style.top = Math.random() * 95 + "vh";
                 heart.style.fontSize = (Math.random() * 2 + 1) + "rem";
                 heart.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out alternate`;

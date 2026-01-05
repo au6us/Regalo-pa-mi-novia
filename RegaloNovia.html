@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Novia ❤️</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES DE COLORES --- */
+        :root {
+            /* MODO NORMAL (ROSA) */
+            --bg-color: #fff0f5;
+            --text-color: #5a2a2a;
+            --primary-color: #d63384;
+            --card-bg: white;
+            --font-main: 'Fredoka', sans-serif;
+            --border-style: none;
+            --box-shadow: 0 10px 25px rgba(214, 51, 132, 0.3);
+            --cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewport="0 0 100 100" style="fill:black;font-size:15px;"><text y="50%">✨</text></svg>') 16 0, auto;
+            --player-border: 2px solid #ffb6c1;
+            --player-radius: 15px;
+            --idea-bg: #ffe4e1;
+        }
+
+        /* MODO STARDEW (PIXEL ART) */
+        body.stardew-mode {
+            --bg-color: #0c0c24;
+            --text-color: #4a2c18;
+            --primary-color: #e37222;
+            --card-bg: #fdf5e6; /* Color crema pergamino */
+            --font-main: 'VT323', monospace;
+            --border-style: 4px solid #8b4513;
+            --box-shadow: 4px 4px 0px #3e2723;
+            --cursor: auto; /* Puedes cambiar esto si consigues una imagen de cursor */
+            --player-border: 4px solid #8b4513;
+            --player-radius: 5px;
+            --idea-bg: #fff8e7; /* Fondo claro para la caja de ideas */
+        }
+
+        /* --- ESTILOS BASE --- */
+        body {
+            font-family: var(--font-main);
+            text-align: center; margin: 0; padding: 0;
+            overflow-x: hidden; color: var(--text-color); padding-bottom: 120px;
+            cursor: var(--cursor);
+            position: relative; 
+            background-color: var(--bg-color);
+            transition: background-color 1s ease, color 0.5s ease;
+        }
+
+        /* --- FONDOS --- */
+        .bg-tunnel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5;
+            background: repeating-radial-gradient(circle at center, #fff5f7 0%, #fff5f7 20px, #ffe4e1 20px, #ffe4e1 40px, #ffccd5 40px, #ffccd5 60px, #ffb6c1 60px, #ffb6c1 80px);
+            background-position: center center;
+            animation: tunnelPulse 6s ease-in-out infinite alternate;
+            transition: opacity 1s ease; opacity: 1;
+        }
+        @keyframes tunnelPulse { 0% { background-size: 100% 100%; } 100% { background-size: 120% 120%; } }
+
+        .bg-stardew {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -4;
+            background-image: url('https://i.pinimg.com/1200x/95/26/f0/9526f08c1e26dcb4f6b9afd9d76af8ab.jpg'); 
+            background-size: cover; background-position: center;
+            opacity: 0; transition: opacity 1s ease;
+        }
+
+        body.stardew-mode .bg-tunnel { opacity: 0; }
+        body.stardew-mode .bg-stardew { opacity: 1; }
+
+        /* --- BOTÓN DE MODO --- */
+        #btn-toggle-mode {
+            position: fixed; top: 20px; left: 20px; z-index: 2000;
+            background: white; border: 2px solid #5a2a2a;
+            padding: 10px 15px; border-radius: 10px; cursor: pointer;
+            font-family: 'Fredoka', sans-serif; font-weight: bold;
+            box-shadow: 0 4px 0 #5a2a2a; transition: transform 0.1s;
+        }
+        #btn-toggle-mode:active { transform: translateY(4px); box-shadow: 0 0 0; }
+        
+        body.stardew-mode #btn-toggle-mode {
+            background: #ff9900; color: #3e0e00; border: 4px solid #3e0e00;
+            font-family: 'VT323', monospace; font-size: 1.2rem;
+            box-shadow: 4px 4px 0 #3e0e00;
+        }
+
+        /* --- COMPONENTES --- */
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
+
+        h1 { 
+            color: var(--primary-color); margin-top: 30px; 
+            font-size: 2.8rem; text-transform: uppercase; letter-spacing: 2px; 
+            text-shadow: 2px 2px 0px white; transition: color 0.5s;
+        }
+        body.stardew-mode h1 { text-shadow: 4px 4px 0px #000; font-size: 4rem; }
+
+        #contador {
+            background: var(--card-bg); padding: 15px 30px;
+            border-radius: 50px; border: var(--border-style); box-shadow: var(--box-shadow);
+            margin: 20px auto; display: inline-block; font-size: 1.2rem;
+            color: var(--primary-color); font-weight: bold; transition: all 0.5s;
+        }
+        body.stardew-mode #contador { border-radius: 5px; font-size: 1.5rem; }
+
+        /* GALERÍA DE FOTOS */
+        .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 40px; }
+        .photo-card {
+            background: var(--card-bg); padding: 12px; border-radius: 12px;
+            box-shadow: var(--box-shadow); transition: transform 0.3s ease; width: 200px;
+            border: var(--border-style);
+        }
+        body.stardew-mode .photo-card { border-radius: 2px; }
+        .photo-card:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 20; }
+        .photo-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        body.stardew-mode .photo-card img { border-radius: 2px; border: 2px solid #8b4513; }
+        .photo-card p { margin-top: 10px; font-weight: bold; color: var(--primary-color); text-transform: uppercase; font-size: 0.9rem; }
+        body.stardew-mode .photo-card p { font-size: 1.2rem; }
+
+        /* CARTA */
+        .carta-section { margin-top: 60px; display: flex; justify-content: center; }
+        .papel-carta {
+            background: var(--card-bg); width: 100%; max-width: 600px; padding: 40px;
+            box-shadow: var(--box-shadow); position: relative;
+            text-align: left; line-height: 1.8; font-size: 1.1rem; color: var(--text-color);
+            min-height: 300px; border: var(--border-style); transition: all 0.5s;
+        }
+        body:not(.stardew-mode) .papel-carta {
+            background-image: linear-gradient(#999 0.05em, transparent 0.1em);
+            background-size: 100% 2em;
+        }
+        body.stardew-mode .papel-carta {
+            background-color: #fceecb; border-radius: 5px; font-size: 1.3rem;
+        }
+
+        /* UTILIDADES (Centradas y arregladas) */
+        .utility-section {
+            margin-top: 50px; background: var(--card-bg);
+            padding: 30px; border-radius: 20px;
+            box-shadow: var(--box-shadow);
+            max-width: 600px; margin-left: auto; margin-right: auto;
+            border: var(--border-style);
+            text-align: center; /* Centrar todo el contenido */
+        }
+        body.stardew-mode .utility-section { border-radius: 5px; }
+
+        .utility-box { margin-bottom: 30px; }
+        .utility-title { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; }
+
+        .date-list { padding: 0; list-style: none; text-align: left; }
+        .date-item {
+            background: var(--bg-color); margin-bottom: 10px; padding: 10px 15px;
+            border-radius: 10px; display: flex; justify-content: space-between;
+            font-size: 1.1rem; border-left: 5px solid var(--primary-color);
+        }
+        body.stardew-mode .date-item { border-radius: 2px; background: #e6ccb2; }
+
+        /* Cuadro de ideas */
+        #idea-display {
+            background: var(--idea-bg); /* Variable para el color de fondo */
+            padding: 20px; border-radius: 10px;
+            margin-bottom: 15px; font-style: italic;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 60px; font-size: 1.2rem; color: var(--text-color);
+        }
+        body.stardew-mode #idea-display { border-radius: 5px; border: 2px dashed #8b4513; }
+
+        /* BOTONES */
+        .btn-frases, .btn-idea, .btn-entrar {
+            background: var(--primary-color); color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-size: 1.2rem;
+            font-weight: bold; cursor: pointer;
+            box-shadow: var(--box-shadow); transition: all 0.2s; font-family: var(--font-main);
+            text-transform: uppercase;
+        }
+        body.stardew-mode .btn-frases, body.stardew-mode .btn-idea, body.stardew-mode .btn-entrar {
+            border-radius: 5px; border: 3px solid #3e0e00; box-shadow: 4px 4px 0 #000;
+        }
+        .btn-frases:hover, .btn-idea:hover { transform: scale(1.05); filter: brightness(1.1); }
+        
+        .btn-frases { margin-top: 60px; /* Separación pedida */ }
+
+        /* --- EXTRAS --- */
+        /* Moños abajo */
+        .corner-sticker { position: fixed; font-size: 3rem; z-index: 90; cursor: pointer; transition: transform 0.3s; }
+        .bottom-left { bottom: 20px; left: 20px; transform: rotate(-15deg); }
+        .bottom-right { bottom: 20px; right: 20px; transform: rotate(15deg); }
+        .corner-sticker:hover { transform: scale(1.3); }
+
+        /* Pantalla de bloqueo */
+        #pantalla-bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 240, 245, 0.98); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
+        .caja-login { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid #ffb6c1; max-width: 90%; }
+        .input-fecha { padding: 10px; font-size: 1.2rem; border-radius: 10px; border: 2px solid #d63384; margin-top: 15px; outline: none; text-align: center; color: #d63384; font-family: 'Fredoka', sans-serif; }
+        
+        /* Reproductor */
+        #music-player-box {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--card-bg); padding: 15px;
+            border-radius: var(--player-radius);
+            border: var(--player-border);
+            box-shadow: var(--box-shadow);
+            z-index: 1000; width: 260px; text-align: center; transition: transform 0.3s;
+        }
+        #music-player-box:hover { transform: translateY(-5px); }
+        .song-title { font-size: 0.9rem; font-weight: bold; color: var(--primary-color); margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 8px; }
+        .ctrl-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); transition: color 0.2s; }
+        .ctrl-btn:hover { color: var(--primary-color); }
+        input[type=range] { width: 80%; accent-color: var(--primary-color); height: 4px; cursor: pointer; }
+
+        /* Elementos flotantes */
+        #frase-flotante-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+        .frase-flotante { position: absolute; color: var(--primary-color); font-size: 1.5rem; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 0 white; white-space: nowrap; animation: floatUp 4s ease-out forwards; }
+        body.stardew-mode .frase-flotante { text-shadow: 2px 2px 0 #000; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(0.8); opacity: 0; } 20% { opacity: 1; transform: translateY(-20px) scale(1.1); } 100% { transform: translateY(-200px) scale(1); opacity: 0; } }
+
+        /* Objetos laterales y confeti */
+        .side-item { position: fixed; top: 110vh; font-size: 3rem; user-select: none; cursor: pointer; z-index: 50; animation: riseUp linear forwards; transition: transform 0.1s; }
+        @keyframes riseUp { to { transform: translateY(-120vh) rotate(360deg); } }
+        .confetti { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 999; opacity: 0; }
+        @keyframes pop { 0% { transform: translate(0, 0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; } }
+
+        /* Corazones fondo */
+        .heart-bg { position: fixed; color: #ffb6c1; font-size: 2rem; user-select: none; z-index: 1; cursor: pointer; transform-style: preserve-3d; transition: opacity 0.5s; }
+        body.stardew-mode .heart-bg { display: none; }
+
+        #youtube-player { position: fixed; bottom: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; z-index: -1; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-tunnel"></div>
+    <div class="bg-stardew"></div>
+
+    <button id="btn-toggle-mode" onclick="cambiarModo()">🌾 Modo Stardew</button>
+
+    <div class="corner-sticker bottom-left" id="sticker1">🎀</div>
+    <div class="corner-sticker bottom-right" id="sticker2">🎀</div>
+
+    <div id="pantalla-bloqueo">
+        <div class="caja-login">
+            <h1 style="font-size: 2rem; margin-top: 0; text-transform: uppercase;">🔒 Tenes que desbloquear la pagina</h1>
+            <p>Ingresa la fecha (dd/mm/aaaa)</p>
+            <input type="text" id="input-fecha" class="input-fecha" placeholder="00/00/0000">
+            <br>
+            <button class="btn-entrar" onclick="verificarFecha()">ENTRAR ❤️</button>
+            <p id="mensaje-error" style="color:red; display:none; margin-top:10px;">Ups, esa no es. Pista: es una fecha muy especial jeje</p>
+        </div>
+    </div>
+
+    <div id="contenido-principal" style="opacity: 0; transition: opacity 2s ease;">
+        <div id="hearts-container"></div>
+        <div id="frase-flotante-container"></div>
+        <div id="side-items-container"></div>
+        <div id="youtube-player"></div>
+
+        <div id="music-player-box">
+            <span class="song-title" id="current-song-title">Cargando música...</span>
+            <div class="controls">
+                <button class="ctrl-btn" onclick="prevSong()">⏮️</button>
+                <button class="ctrl-btn" onclick="togglePlay()" id="play-btn">⏸️</button>
+                <button class="ctrl-btn" onclick="nextSong()">⏭️</button>
+            </div>
+            <input type="range" min="0" max="100" value="50" oninput="setVolume(this.value)">
+        </div>
+
+        <div class="container">
+            <h1>💗 ¡FELIZ MES JUNTOS, AMOR! 💗</h1>
+            <div id="contador">Calculando...</div>
+            
+            <div class="gallery" id="gallery-normal">
+                <div class="photo-card" style="transform: rotate(-3deg);">
+                    <img src="foto1.jpg" alt="Foto 1">
+                    <p>💗 ¡TE AMO</p>
+                </div>
+                <div class="photo-card" style="transform: rotate(3deg);">
+                    <img src="foto2.jpg" alt="Foto 2">
+                    <p>A CADA</p>
+                </div>
+                <div class="photo-card" style="transform: rotate(-2deg);">
+                    <img src="foto3.jpg" alt="Foto 3">
+                    <p>SEGUNDO! 💗</p>
+                </div>
+            </div>
+
+            <div class="gallery" id="gallery-stardew" style="display: none;">
+                <div class="photo-card" style="transform: rotate(-3deg);">
+                    <img src="foto4.jpg" alt="Foto 4">
+                    <p>⭐ ¡POR</p>
+                </div>
+                <div class="photo-card" style="transform: rotate(3deg);">
+                    <img src="foto5.jpg" alt="Foto 5">
+                    <p>MUCHOS</p>
+                </div>
+                <div class="photo-card" style="transform: rotate(-2deg);">
+                    <img src="foto6.jpg" alt="Foto 6">
+                    <p>MESES MÁS! ⭐</p>
+                </div>
+            </div>
+
+            <div class="carta-section">
+                <div class="papel-carta">
+                    <div style="text-align: center;"><h2>💌 CARTA PARA VOS</h2></div>
+                    <div id="cuerpo-carta"></div>
+                    <span id="cursor-carta" class="cursor-carta"></span>
+                </div>
+            </div>
+
+            <div class="utility-section">
+                <div class="utility-box">
+                    <h3 class="utility-title">📅 PRÓXIMAS FECHAS</h3>
+                    <ul class="date-list" id="lista-fechas"></ul>
+                </div>
+                <div class="utility-box">
+                    <h3 class="utility-title">🎲 ¿QUÉ HACEMOS HOY?</h3>
+                    <div id="idea-display">¡Presiona para una idea!</div>
+                    <button class="btn-idea" onclick="generarCita()">💡 Tirar Idea</button>
+                </div>
+            </div>
+
+            <button class="btn-frases" onclick="lanzarSorpresa()">✨ BOTÓN AMOROSO ✨</button>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        /* --- CONFIGURACIÓN DE CARTA Y FRASES --- */
+        const mensajeCarta = `Hola mi amor! ❤️
+
+¡Feliz día a nosotrooos! Quería hacer algo distinto, así que me puse a armar esta página para vos (costó pero funca jasjas).
+
+Gracias por ser mi compañera en todo amor, por bancarme en todas, por estar ahi siempre y por esas carcajadas que nos mandamos siempre. Amo cada momento con vos, ya sea saliendo a comer, viciando, mirando algo, es que quiero compartir todo con vos no importa que.
+
+Estoy super feliz de tu nuevo trabajo, se que ha sido meses duros sin ver una luz, pero al fin pudiste alcanzar este puestito hermoso que tenes. Estoy orgulloso en la mujer que te estas convirtiendo, poco a poco te armas tu carrera profesional jeje 😚. Espero que en esta nueva etapa de tu vida te vaya de mejor en mejor, que Dios te re acompañe siempre y sabes OBVIAMENTE que podes confiar en mi en lo que quieras, estaré para siempre con vos en todos los lugares que vayas.
+
+Asi como estoy en las buenas, obvio estaré en las malas, cuando todo vaya mal, cuando tropieces, cuando tengas un mal día, mala racha, quiero estar ahí para apoyarte y darte todo mi amor. Se que soy medio pesado a veces, pero quiero mejorar en lo que soy para vos y para nuestro futuro juntitos 💗💗💗💗
+
+Sos mi negrita hermosa y te elijo todos los días.
+
+¡Te amo con todo mi ser! 😚😚💗`;
+
+        const fechaCorrecta = "05/03/2023";
+        
+        const frases = [
+            "TE AMO CON TODO MI SER",
+            "TE ELIJO A VOS CADA DIA",
+            "TE EXTRAÑOOO 😭😭",
+            "AGUANTEN LOS SHAWARMA",
+            "TE ADORO MI NEGRA BELLA",
+            "ME COSTO HACER ESTO PERO FUNCA VISTE",
+            "MI NEGRITA MI TODO TE AMU 😚",
+            "QUE PINTA VICIAR? 🥵🥵",
+            "MI BEBITA FIU FIUUUU",
+            "YA TE QUIERO VOLVER A VER AMOR :(",
+            "TE MANDO MIL BESITOS 😚",
+            "OTRO DIA MÁS SIENDO NOVIOSS SIUU",
+            "quiero plata",
+            "6767676767",
+            "DOOOUUU",
+            "no hagaaaaaaaaaas 🤪",
+            "TE ADORO",
+            "TE AMOOO",
+            "TE QUIEROO"
+        ];
+        
+        const ideasCitas = [
+            "🍕 Noche de Pizzas o cualquier morfi",
+            "🎬 Maratón en pijama (piedra papel o tijera, gana el que elije)",
+            "👩‍🍳 Cocinar juntos",
+            "🌳 Salidaaaaa (donde sea)",
+            "🍷 Cena romántica",
+            "🎮 Tarde de juegos"
+        ];
+
+        /* --- CONFIGURACIÓN DE AUDIO Y LISTAS --- */
+        const playlistNormal = [
+            { id: 'ApXoWvfEYVU', title: 'Sunflower - Post Malone' },
+            { id: 'jO2viLEW-1A', title: 'comethru - Jeremy Zucker' }
+        ];
+        const playlistStardew = [
+            { id: 'JJCFQtTPq_8', title: 'Stardew Valley OST (Relaxing)' } 
+        ];
+
+        let currentPlaylist = playlistNormal;
+        let isStardewMode = false;
+
+        /* --- LOGICA DOBLE MUNDO --- */
+        function cambiarModo() {
+            const body = document.body;
+            const btn = document.getElementById("btn-toggle-mode");
+            const sticker1 = document.getElementById("sticker1");
+            const sticker2 = document.getElementById("sticker2");
+            const galleryNormal = document.getElementById("gallery-normal");
+            const galleryStardew = document.getElementById("gallery-stardew");
+
+            isStardewMode = !isStardewMode;
+
+            if (isStardewMode) {
+                // ACTIVAR MODO STARDEW
+                body.classList.add("stardew-mode");
+                btn.innerText = "🎀 Volver a la Normalidad";
+                sticker1.innerText = "⭐";
+                sticker2.innerText = "💙";
+                galleryNormal.style.display = "none";
+                galleryStardew.style.display = "flex";
+                
+                currentPlaylist = playlistStardew;
+                currentIdx = 0;
+                if(player) player.loadVideoById(currentPlaylist[0].id);
+
+            } else {
+                // VOLVER MODO NORMAL
+                body.classList.remove("stardew-mode");
+                btn.innerText = "🌾 Modo Stardew";
+                sticker1.innerText = "🎀";
+                sticker2.innerText = "🎀";
+                galleryNormal.style.display = "flex";
+                galleryStardew.style.display = "none";
+                
+                currentPlaylist = playlistNormal;
+                currentIdx = 0;
+                if(player) player.loadVideoById(currentPlaylist[0].id);
+            }
+            updatePlayerUI();
+        }
+
+        /* --- OBJETOS LATERALES --- */
+        function iniciarSideItems() { setInterval(crearSideItem, 800); }
+        
+        const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋"];
+        const emojisStardew = ["🌾", "🐔", "⭐", "🍄", "🌲"];
+
+        function crearSideItem() {
+            const container = document.getElementById("side-items-container");
+            const item = document.createElement("div"); item.classList.add("side-item");
+            
+            if (isStardewMode) {
+                item.innerText = emojisStardew[Math.floor(Math.random() * emojisStardew.length)];
+            } else {
+                item.innerText = emojisNormal[Math.floor(Math.random() * emojisNormal.length)];
+            }
+
+            const lado = Math.random() > 0.5 ? "left" : "right";
+            if (lado === "left") item.style.left = (Math.random() * 10 + 2) + "vw"; 
+            else item.style.left = (Math.random() * 10 + 85) + "vw"; 
+            item.style.animationDuration = (Math.random() * 5 + 5) + "s"; 
+            item.onclick = function(e) {
+                lanzarConfeti(e.clientX, e.clientY); 
+                item.style.transform = "scale(1.5)"; item.style.opacity = "0";
+                setTimeout(() => item.remove(), 200); 
+            };
+            container.appendChild(item); setTimeout(() => { item.remove(); }, 10000);
+        }
+
+
+        /* --- FUNCIONES GENERALES --- */
+        function verificarFecha() {
+            const input = document.getElementById("input-fecha").value;
+            const error = document.getElementById("mensaje-error");
+            if (input === fechaCorrecta) {
+                document.getElementById("pantalla-bloqueo").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("pantalla-bloqueo").style.display = "none";
+                    document.getElementById("contenido-principal").style.opacity = "1";
+                    iniciarMecanografia();
+                    if(player) player.playVideo();
+                    iniciarSideItems();
+                    crearCorazones();
+                    calcularProximasFechas();
+                }, 1000);
+            } else {
+                error.style.display = "block";
+            }
+        }
+
+        let charIndex = 0;
+        function iniciarMecanografia() {
+            if (charIndex < mensajeCarta.length) {
+                const char = mensajeCarta.charAt(charIndex);
+                if (char === '\n') document.getElementById("cuerpo-carta").innerHTML += '<br>';
+                else document.getElementById("cuerpo-carta").innerHTML += char;
+                charIndex++; setTimeout(iniciarMecanografia, 50);
+            } else { document.getElementById("cursor-carta").style.display = "none"; }
+        }
+
+        function crearCorazones() {
+            const container = document.getElementById("hearts-container");
+            container.innerHTML = "";
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement("div"); heart.classList.add("heart-bg"); heart.innerHTML = "❤️";
+                heart.style.left = Math.random() * 95 + "vw"; heart.style.top = Math.random() * 95 + "vh";
+                heart.style.fontSize = (Math.random() * 2 + 1) + "rem";
+                heart.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out alternate`;
+                heart.onclick = function(e) {
+                    lanzarConfeti(e.clientX, e.clientY);
+                    this.style.opacity = "0"; setTimeout(() => this.remove(), 500);
+                };
+                container.appendChild(heart);
+            }
+        }
+
+        function lanzarConfeti(x, y) {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            if (!x) x = window.innerWidth / 2; if (!y) y = window.innerHeight / 2;
+            for (let j = 0; j < 20; j++) {
+                const confeti = document.createElement('div'); confeti.classList.add('confetti');
+                confeti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confeti.style.left = x + 'px'; confeti.style.top = y + 'px';
+                const dirX = (Math.random() - 0.5) * 200 + 'px'; const dirY = (Math.random() - 1) * 200 + 'px';
+                confeti.style.setProperty('--x', dirX); confeti.style.setProperty('--y', dirY);
+                confeti.style.animation = `pop ${Math.random() * 0.5 + 0.5}s ease-out forwards`;
+                document.body.appendChild(confeti); setTimeout(() => { confeti.remove(); }, 1000);
+            }
+        }
+
+        function lanzarSorpresa() {
+            lanzarFrase(); 
+            lanzarConfeti(window.innerWidth/2, window.innerHeight * 0.8);
+        }
+        
+        function lanzarFrase() {
+            const container = document.getElementById("frase-flotante-container");
+            const el = document.createElement("div"); el.classList.add("frase-flotante");
+            el.innerText = frases[Math.floor(Math.random() * frases.length)];
+            el.style.left = Math.random() * 80 + 10 + "%"; el.style.top = "60%";
+            container.appendChild(el); setTimeout(() => { el.remove(); }, 4000);
+        }
+
+        function calcularProximasFechas() {
+            const lista = document.getElementById("lista-fechas");
+            lista.innerHTML = "";
+            const diaAniversario = 5; 
+            const mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            let hoy = new Date();
+            for(let i = 0; i < 4; i++) {
+                let mesActual = hoy.getMonth() + i; let anioActual = hoy.getFullYear();
+                if (mesActual > 11) { mesActual -= 12; anioActual++; }
+                let fechaFutura = new Date(anioActual, mesActual, diaAniversario);
+                if (fechaFutura < new Date()) fechaFutura = new Date(anioActual, mesActual + 1, diaAniversario);
+                const item = document.createElement("li"); item.classList.add("date-item");
+                item.innerHTML = `<span>5 de ${mesesNombres[fechaFutura.getMonth()]}</span> <span style="font-weight:bold; color:var(--primary-color)">${diasSemana[fechaFutura.getDay()]}</span>`;
+                lista.appendChild(item);
+            }
+        }
+
+        function generarCita() {
+            const display = document.getElementById("idea-display"); display.style.opacity = 0;
+            setTimeout(() => { display.innerText = ideasCitas[Math.floor(Math.random() * ideasCitas.length)]; display.style.opacity = 1; }, 200);
+        }
+        
+        const fechaInicio = new Date("2023-03-05T00:00:00"); 
+        function actualizarContador() {
+            const ahora = new Date(); const diferencia = ahora - fechaInicio;
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+            const anios = Math.floor(dias / 365); const diasRestantes = dias % 365;
+            document.getElementById("contador").innerHTML = `LLEVAMOS: ${anios} AÑOS, ${diasRestantes} DÍAS, ${horas} HS, ${minutos} MIN Y ${segundos} SEG`;
+        }
+        setInterval(actualizarContador, 1000);
+
+        let player; let currentIdx = 0; let isPlaying = false;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '1', width: '1', videoId: currentPlaylist[currentIdx].id,
+                playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin },
+                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
+            });
+        }
+        function onPlayerReady(event) { updatePlayerUI(); player.setVolume(50); }
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) nextSong();
+            if (event.data === YT.PlayerState.PLAYING) { isPlaying = true; document.getElementById("play-btn").innerText = "⏸️"; }
+            if (event.data === YT.PlayerState.PAUSED) { isPlaying = false; document.getElementById("play-btn").innerText = "▶️"; }
+        }
+        function updatePlayerUI() { document.getElementById("current-song-title").innerText = currentPlaylist[currentIdx].title; }
+        function togglePlay() { if (player) { if (isPlaying) player.pauseVideo(); else player.playVideo(); } }
+        function nextSong() { currentIdx++; if (currentIdx >= currentPlaylist.length) currentIdx = 0; if(player) player.loadVideoById(currentPlaylist[currentIdx].id); updatePlayerUI(); }
+        function prevSong() { currentIdx--; if (currentIdx < 0) currentIdx = currentPlaylist.length - 1; if(player) player.loadVideoById(currentPlaylist[currentIdx].id); updatePlayerUI(); }
+        function setVolume(val) { if (player) player.setVolume(val); }
+    </script>
+</body>
+</html>

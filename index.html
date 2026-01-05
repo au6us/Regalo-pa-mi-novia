@@ -229,7 +229,7 @@
         .confetti { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 999; opacity: 0; }
         @keyframes pop { 0% { transform: translate(0, 0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; } }
 
-        /* Corazones fondo */
+        /* Corazones fondo - MODIFICADO PARA VARIEDAD */
         .heart-bg { position: fixed; color: #ffb6c1; font-size: 2rem; user-select: none; z-index: 1; cursor: pointer; transform-style: preserve-3d; transition: opacity 0.5s; }
         body.stardew-mode .heart-bg { display: none; }
 
@@ -409,7 +409,6 @@ Sos mi negrita hermosa y te elijo todos los días.
             { id: 'D4bKwi7gRUA', title: 'Koino Yokan - Lo Que Va A Venir' }
         ];
         
-        // --- LISTA STARDEW CON COMAS ARREGLADAS ---
         const playlistStardew = [
             { id: 'JJCFQtTPq_8', title: 'Stardew Valley OST (Relaxing)' }, 
             { id: '2NihzptRjto', title: 'Infinity Castle Theme | Demon slayer' }, 
@@ -479,7 +478,7 @@ Sos mi negrita hermosa y te elijo todos los días.
         /* --- OBJETOS LATERALES --- */
         function iniciarSideItems() { setInterval(crearSideItem, 800); }
         
-        // AGREGADOS FLORES Y CORAZONES DE COLORES
+        // LISTA COMPLETA DE EMOJIS PARA EL FONDO Y LOS LATERALES
         const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋", "🌸", "🌹", "🌷", "💐", "❤️", "🧡", "💛", "💚", "💙", "💜", "🤍"];
         const emojisStardew = ["🌾", "🐔", "⭐", "🍄", "🌲"];
 
@@ -507,7 +506,7 @@ Sos mi negrita hermosa y te elijo todos los días.
 
 
         /* --- FUNCIONES GENERALES --- */
-        // NUEVA FUNCIÓN VERIFICAR FECHA (para los 3 inputs)
+        // FUNCIÓN VERIFICAR FECHA (para los 3 inputs)
         function verificarFecha() {
             let dia = document.getElementById("input-dia").value;
             let mes = document.getElementById("input-mes").value;
@@ -528,7 +527,7 @@ Sos mi negrita hermosa y te elijo todos los días.
                     iniciarMecanografia();
                     if(player) player.playVideo();
                     iniciarSideItems();
-                    crearCorazones();
+                    crearCorazones(); // AHORA ESTA FUNCIÓN USA LOS EMOJIS VARIADOS
                     calcularProximasFechas();
                 }, 1000);
             } else {
@@ -546,11 +545,20 @@ Sos mi negrita hermosa y te elijo todos los días.
             } else { document.getElementById("cursor-carta").style.display = "none"; }
         }
 
+        // FUNCIÓN MODIFICADA PARA USAR EMOJIS VARIADOS EN EL FONDO
         function crearCorazones() {
             const container = document.getElementById("hearts-container");
             container.innerHTML = "";
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement("div"); heart.classList.add("heart-bg"); heart.innerHTML = "❤️";
+            
+            // Usamos la misma lista variada que los objetos laterales
+            const listaEmojis = emojisNormal;
+
+            for (let i = 0; i < 30; i++) { // Aumenté un poco la cantidad para más color
+                const heart = document.createElement("div"); heart.classList.add("heart-bg");
+                
+                // ELIGE UN EMOJI AL AZAR DE LA LISTA VARIADA
+                heart.innerHTML = listaEmojis[Math.floor(Math.random() * listaEmojis.length)];
+                
                 heart.style.left = Math.random() * 95 + "vw"; heart.style.top = Math.random() * 95 + "vh";
                 heart.style.fontSize = (Math.random() * 2 + 1) + "rem";
                 heart.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out alternate`;

@@ -35,10 +35,10 @@
             --font-main: 'VT323', monospace;
             --border-style: 4px solid #8b4513;
             --box-shadow: 4px 4px 0px #3e2723;
-            --cursor: auto; /* Puedes cambiar esto si consigues una imagen de cursor */
+            --cursor: auto; 
             --player-border: 4px solid #8b4513;
             --player-radius: 5px;
-            --idea-bg: #fff8e7; /* Fondo claro para la caja de ideas */
+            --idea-bg: #fff8e7; 
         }
 
         /* --- ESTILOS BASE --- */
@@ -139,14 +139,14 @@
             background-color: #fceecb; border-radius: 5px; font-size: 1.3rem;
         }
 
-        /* UTILIDADES (Centradas y arregladas) */
+        /* UTILIDADES */
         .utility-section {
             margin-top: 50px; background: var(--card-bg);
             padding: 30px; border-radius: 20px;
             box-shadow: var(--box-shadow);
             max-width: 600px; margin-left: auto; margin-right: auto;
             border: var(--border-style);
-            text-align: center; /* Centrar todo el contenido */
+            text-align: center; 
         }
         body.stardew-mode .utility-section { border-radius: 5px; }
 
@@ -163,8 +163,7 @@
 
         /* Cuadro de ideas */
         #idea-display {
-            background: var(--idea-bg); /* Variable para el color de fondo */
-            padding: 20px; border-radius: 10px;
+            background: var(--idea-bg); padding: 20px; border-radius: 10px;
             margin-bottom: 15px; font-style: italic;
             display: flex; align-items: center; justify-content: center;
             min-height: 60px; font-size: 1.2rem; color: var(--text-color);
@@ -183,21 +182,17 @@
             border-radius: 5px; border: 3px solid #3e0e00; box-shadow: 4px 4px 0 #000;
         }
         .btn-frases:hover, .btn-idea:hover, .btn-entrar:hover { transform: scale(1.05); filter: brightness(1.1); }
-        
-        .btn-frases { margin-top: 60px; /* Separación pedida */ }
+        .btn-frases { margin-top: 60px; }
 
-        /* --- EXTRAS --- */
-        /* Moños abajo */
+        /* --- EXTRAS Y PANTALLA BLOQUEO --- */
         .corner-sticker { position: fixed; font-size: 3rem; z-index: 90; cursor: pointer; transition: transform 0.3s; }
         .bottom-left { bottom: 20px; left: 20px; transform: rotate(-15deg); }
         .bottom-right { bottom: 20px; right: 20px; transform: rotate(15deg); }
         .corner-sticker:hover { transform: scale(1.3); }
 
-        /* Pantalla de bloqueo */
         #pantalla-bloqueo { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: transparent; 
-            backdrop-filter: blur(2px);
+            background: transparent; backdrop-filter: blur(2px);
             z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             transition: opacity 1s ease; 
         }
@@ -206,8 +201,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
             border: 3px solid #ffb6c1; max-width: 90%; text-align: center; 
         }
-        
-        /* Estilos para los 3 inputs de fecha */
         .fecha-inputs-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
         .input-fecha-small { width: 60px; padding: 10px; font-size: 1.2rem; border-radius: 10px; border: 2px solid #d63384; outline: none; text-align: center; color: #d63384; font-family: 'Fredoka', sans-serif; }
         .input-anio { width: 80px; } 
@@ -229,34 +222,94 @@
         .ctrl-btn:hover { color: var(--primary-color); }
         input[type=range] { width: 80%; accent-color: var(--primary-color); height: 4px; cursor: pointer; }
 
-        /* Elementos flotantes (FRASES) - MODIFICADO PARA CENTRAR */
+        /* Elementos flotantes y fondo */
         #frase-flotante-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
         .frase-flotante { 
-            position: absolute; 
-            width: 100%; /* Ocupa todo el ancho */
-            text-align: center; /* Centra el texto */
-            color: var(--primary-color); 
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            text-shadow: 2px 2px 0 white; 
-            white-space: nowrap; 
-            animation: floatUp 4s ease-out forwards; 
+            position: absolute; width: 100%; text-align: center;
+            color: var(--primary-color); font-size: 1.5rem; font-weight: bold; 
+            text-transform: uppercase; text-shadow: 2px 2px 0 white; 
+            white-space: nowrap; animation: floatUp 4s ease-out forwards; 
         }
         body.stardew-mode .frase-flotante { text-shadow: 2px 2px 0 #000; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(0.8); opacity: 0; } 20% { opacity: 1; transform: translateY(-20px) scale(1.1); } 100% { transform: translateY(-200px) scale(1); opacity: 0; } }
 
-        /* Objetos laterales y confeti */
         .side-item { position: fixed; top: 110vh; font-size: 3rem; user-select: none; cursor: pointer; z-index: 50; animation: riseUp linear forwards; transition: transform 0.1s; }
         @keyframes riseUp { to { transform: translateY(-120vh) rotate(360deg); } }
         .confetti { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 999; opacity: 0; }
         @keyframes pop { 0% { transform: translate(0, 0) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; } }
 
-        /* Corazones/Flores fondo */
         .heart-bg { position: fixed; color: #ffb6c1; font-size: 2rem; user-select: none; z-index: 1; cursor: pointer; transform-style: preserve-3d; transition: opacity 0.5s; }
         body.stardew-mode .heart-bg { display: none; }
-
         #youtube-player { position: fixed; bottom: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; z-index: -1; }
+
+        /* =========================================
+           ESTILOS DEL PERRO STARDEW (SPRITES)
+           ========================================= */
+        #stardew-dog {
+            position: fixed;
+            bottom: 20px; /* Altura inicial */
+            left: 10vw;   /* Posición horizontal inicial */
+            width: 32px;  /* Ancho de UN cuadrito del sprite */
+            height: 32px; /* Alto de UN cuadrito del sprite */
+            background-image: url('stardew-dog-sprites.png'); /* NOMBRE EXACTO DE TU IMAGEN */
+            background-repeat: no-repeat;
+            
+            /* ¡MAGIA PIXEL ART! Hace que no se vea borroso al agrandar */
+            image-rendering: pixelated; 
+            
+            /* Tamaño del perro (4 veces más grande) y dirección inicial */
+            transform: scale(4) scaleX(1); 
+            transform-origin: bottom center;
+            z-index: 80; /* Detrás de los stickers pero delante del fondo */
+            
+            display: none; /* Oculto en modo normal */
+            pointer-events: auto; cursor: pointer; /* Se le puede hacer click */
+            
+            /* Transición suave para cuando camina de un lado a otro */
+            transition: left 3s linear; 
+        }
+
+        /* Solo visible en modo Stardew */
+        body.stardew-mode #stardew-dog { display: block; }
+        
+        /* Clase para voltear al perro cuando camina a la izquierda */
+        #stardew-dog.dog-flip { transform: scale(4) scaleX(-1); }
+
+        /* --- DEFINICIÓN DE LAS ANIMACIONES (Sprite Sheet) --- */
+        /* Las posiciones 'background-position-y' están calculadas basadas en tu imagen,
+           asumiendo que cada fila mide aprox 32px de alto. */
+
+        /* ESTADO: SENTADO (Idle) - Usa la fila 5 */
+        .dog-state-sit {
+            background-position-y: -128px; /* 4 filas hacia abajo x 32px */
+            /* steps(4) significa que la fila tiene 4 dibujos */
+            animation: spriteAnim4Frames 0.8s steps(4) infinite;
+        }
+
+        /* ESTADO: CAMINANDO (Walk) - Usa la fila 2 */
+        .dog-state-walk {
+            background-position-y: -32px; /* 1 fila hacia abajo x 32px */
+            animation: spriteAnim4Frames 0.6s steps(4) infinite;
+        }
+
+        /* ESTADO: DURMIENDO (Sleep) - Usa la fila 8 */
+        .dog-state-sleep {
+            background-position-y: -224px; /* 7 filas hacia abajo x 32px */
+            /* steps(2) porque la animación de dormir tiene solo 2 dibujos en bucle */
+            animation: spriteAnim2Frames 1.5s steps(2) infinite;
+        }
+
+        /* KEYFRAMES: Mueven la imagen horizontalmente para cambiar de cuadrito */
+        /* Para filas de 4 frames (ancho total aprox 128px) */
+        @keyframes spriteAnim4Frames { 
+            from { background-position-x: 0; } 
+            to { background-position-x: -128px; } 
+        }
+        /* Para filas de 2 frames (ancho total aprox 64px) */
+        @keyframes spriteAnim2Frames { 
+            from { background-position-x: 0; } 
+            to { background-position-x: -64px; } 
+        }
     </style>
 </head>
 <body>
@@ -266,6 +319,7 @@
     
     <div id="hearts-container"></div>
 
+    <div id="stardew-dog" class="dog-state-sit"></div>
     <button id="btn-toggle-mode" onclick="cambiarModo()">🌾 Modo Stardew</button>
 
     <div class="corner-sticker bottom-left" id="sticker1">🎀</div>
@@ -275,7 +329,6 @@
         <div class="caja-login">
             <h1 style="font-size: 2rem; margin-top: 0; text-transform: uppercase;">🔒 TENES QUE DESBLOQUEAR LA PAGINA 🔒</h1>
             <p>Ingresa la fecha (Día / Mes / Año)</p>
-            
             <div class="fecha-inputs-container">
                 <input type="number" id="input-dia" class="input-fecha-small" placeholder="DD" min="1" max="31">
                 <span style="font-size: 1.5rem; color: var(--primary-color)">/</span>
@@ -283,7 +336,6 @@
                 <span style="font-size: 1.5rem; color: var(--primary-color)">/</span>
                 <input type="number" id="input-anio" class="input-fecha-small input-anio" placeholder="AAAA" min="2020">
             </div>
-
             <br>
             <button class="btn-entrar" style="margin-top: 25px;" onclick="verificarFecha()">ENTRAR ❤️</button>
             <p id="mensaje-error" style="color:red; display:none; margin-top:20px;">Ups, esa no es. Pista: es una fecha muy especial jeje</p>
@@ -300,7 +352,6 @@
                 <div id="radio-title" style="font-weight:bold; font-size: 1.1rem; color: var(--primary-color); text-transform: uppercase;">LA RADIO DEL AMOR 📻</div>
                 <div id="radio-subtitle" style="font-size: 0.8rem; font-style: italic;">te dedico todas amor</div>
             </div>
-
             <span class="song-title" id="current-song-title">Cargando música...</span>
             <div class="controls">
                 <button class="ctrl-btn" onclick="prevSong()">⏮️</button>
@@ -370,82 +421,100 @@
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        /* --- CONFIGURACIÓN DE CARTA Y FRASES --- */
-        const mensajeCarta = `Hola mi amor! ❤️
-
-¡Feliz día a nosotrooos! Quería hacer algo distinto, así que me puse a armar esta página para vos (costó pero funca jasjas).
-
-Gracias por ser mi compañera en todo amor, por bancarme en todas, por estar ahi siempre y por esas carcajadas que nos mandamos siempre. Amo cada momento con vos, ya sea saliendo a comer, viciando, mirando algo, es que quiero compartir todo con vos no importa que.
-
-Estoy super feliz de tu nuevo trabajo, se que ha sido meses duros sin ver una luz, pero al fin pudiste alcanzar este puestito hermoso que tenes. Estoy orgulloso en la mujer que te estas convirtiendo, poco a poco te armas tu carrera profesional jeje 😚. Espero que en esta nueva etapa de tu vida te vaya de mejor en mejor, que Dios te re acompañe siempre y sabes OBVIAMENTE que podes confiar en mi en lo que quieras, estaré para siempre con vos en todos los lugares que vayas.
-
-Asi como estoy en las buenas, obvio estaré en las malas, cuando todo vaya mal, cuando tropieces, cuando tengas un mal día, mala racha, quiero estar ahí para apoyarte y darte todo mi amor. Se que soy medio pesado a veces, pero quiero mejorar en lo que soy para vos y para nuestro futuro juntitos 💗💗💗💗
-
-Sos mi negrita hermosa y te elijo todos los días.
-
-¡Te amo con todo mi ser! 😚😚💗`;
-
+        /* --- CONFIGURACIÓN GENERAL --- */
+        const mensajeCarta = `Hola mi amor! ❤️\n\n¡Feliz día a nosotrooos! Quería hacer algo distinto, así que me puse a armar esta página para vos (costó pero funca jasjas).\n\nGracias por ser mi compañera en todo amor, por bancarme en todas, por estar ahi siempre y por esas carcajadas que nos mandamos siempre. Amo cada momento con vos, ya sea saliendo a comer, viciando, mirando algo, es que quiero compartir todo con vos no importa que.\n\nEstoy super feliz de tu nuevo trabajo, se que ha sido meses duros sin ver una luz, pero al fin pudiste alcanzar este puestito hermoso que tenes. Estoy orgulloso en la mujer que te estas convirtiendo, poco a poco te armas tu carrera profesional jeje 😚. Espero que en esta nueva etapa de tu vida te vaya de mejor en mejor, que Dios te re acompañe siempre y sabes OBVIAMENTE que podes confiar en mi en lo que quieras, estaré para siempre con vos en todos los lugares que vayas.\n\nAsi como estoy en las buenas, obvio estaré en las malas, cuando todo vaya mal, cuando tropieces, cuando tengas un mal día, mala racha, quiero estar ahí para apoyarte y darte todo mi amor. Se que soy medio pesado a veces, pero quiero mejorar en lo que soy para vos y para nuestro futuro juntitos 💗💗💗💗\n\nSos mi negrita hermosa y te elijo todos los días.\n\n¡Te amo con todo mi ser! 😚😚💗`;
         const fechaCorrecta = "05/03/2023";
-        
-        const frases = [
-            "TE AMO CON TODO MI SER",
-            "TE ELIJO A VOS CADA DIA",
-            "TE EXTRAÑOOO 😭😭",
-            "AGUANTEN LOS SHAWARMA",
-            "TE ADORO MI NEGRA BELLA",
-            "ME COSTO HACER ESTO PERO FUNCA VISTE",
-            "MI NEGRITA MI TODO TE AMU 😚",
-            "QUE PINTA VICIAR? 🥵🥵",
-            "MI BEBITA FIU FIUUUU",
-            "YA TE QUIERO VOLVER A VER AMOR :(",
-            "TE MANDO MIL BESITOS 😚",
-            "OTRO DIA MÁS SIENDO NOVIOSS SIUU",
-            "quiero plata",
-            "6767676767",
-            "DOOOUUU",
-            "no hagaaaaaaaaaas 🤪",
-            "TE ADORO",
-            "TE AMOOO",
-            "TE QUIEROO"
-        ];
-        
-        const ideasCitas = [
-            "🍕 Noche de Pizzas o cualquier morfi",
-            "🎬 Maratón en pijama (piedra papel o tijera, gana el que elije)",
-            "👩‍🍳 Cocinar juntos",
-            "🌳 Salidaaaaa (donde sea)",
-            "🍷 Cena romántica",
-            "🎮 Tarde de juegos"
-        ];
-
-        /* --- CONFIGURACIÓN DE AUDIO Y LISTAS --- */
-        const playlistNormal = [
-            { id: 'GxldQ9eX2wo', title: 'Stephen Sanchez - Until I Found You' },
-            { id: 'dvgZkm1xWPE', title: 'Viva La Vida - Coldplay' },
-            { id: 'tk0ezF46sAc', title: 'Llunr - Rocketship' },
-            { id: 'g09UoqOKHx0', title: 'Conociendo Rusia - "Quiero que me llames"' },
-            { id: 'iTrJ3q5Ocpc', title: 'Conociendo Rusia - "Te lo voy a decir"' },
-            { id: '5wwhkhT_wEs', title: 'Conociendo Rusia - "A la vez"' },
-            { id: '2PH7dK6SLC8', title: 'John Mayer - New Light' },
-            { id: 'fopSgMkWEUk', title: 'Julieta Venegas - Limon Y Sal' },
-            { id: 'QQcQDbpDH_o', title: 'Cinema - Skrillex' },
-            { id: 'MzNWX0xL3mA', title: 'We Become We - Journey To Bethlehem' },
-            { id: 'D4bKwi7gRUA', title: 'Koino Yokan - Lo Que Va A Venir' }
-        ];
-        
-        const playlistStardew = [
-            { id: 'JJCFQtTPq_8', title: 'Stardew Valley OST (Relaxing)' }, 
-            { id: '2NihzptRjto', title: 'Infinity Castle Theme | Demon slayer' }, 
-            { id: 'faqmNf_fZlE', title: 'Hunter X Hunter Opening 1 | Departure!' }, 
-            { id: 'ih2BwMX_ilI', title: 'Hunter x Hunter Ending | 2' }, 
-            { id: 'HBAmFuEWPhE', title: 'Hunter x Hunter Ending l 6' },
-            { id: 'st4wcpjZeQQ', title: 'Demon Slayer - Opening 3' }, 
-            { id: 'g3HIQ0gdzYc', title: 'Hunter x Hunter Ending | 5' }, 
-            { id: 'IVBU9ymY', title: 'Hunter x Hunter Ending | 4' }
-        ];
+        const frases = ["TE AMO CON TODO MI SER", "TE ELIJO A VOS CADA DIA", "TE EXTRAÑOOO 😭😭", "AGUANTEN LOS SHAWARMA", "TE ADORO MI NEGRA BELLA", "ME COSTO HACER ESTO PERO FUNCA VISTE", "MI NEGRITA MI TODO TE AMU 😚", "QUE PINTA VICIAR? 🥵🥵", "MI BEBITA FIU FIUUUU", "YA TE QUIERO VOLVER A VER AMOR :(", "TE MANDO MIL BESITOS 😚", "OTRO DIA MÁS SIENDO NOVIOSS SIUU", "quiero plata", "6767676767", "DOOOUUU", "no hagaaaaaaaaaas 🤪", "TE ADORO", "TE AMOOO", "TE QUIEROO"];
+        const ideasCitas = ["🍕 Noche de Pizzas o cualquier morfi", "🎬 Maratón en pijama", "👩‍🍳 Cocinar juntos", "🌳 Salidaaaaa (donde sea)", "🍷 Cena romántica", "🎮 Tarde de juegos"];
+        const playlistNormal = [{ id: 'GxldQ9eX2wo', title: 'Stephen Sanchez - Until I Found You' }, { id: 'dvgZkm1xWPE', title: 'Viva La Vida - Coldplay' }, { id: 'tk0ezF46sAc', title: 'Llunr - Rocketship' }, { id: 'g09UoqOKHx0', title: 'Conociendo Rusia - "Quiero que me llames"' }, { id: 'iTrJ3q5Ocpc', title: 'Conociendo Rusia - "Te lo voy a decir"' }, { id: '5wwhkhT_wEs', title: 'Conociendo Rusia - "A la vez"' }, { id: '2PH7dK6SLC8', title: 'John Mayer - New Light' }, { id: 'fopSgMkWEUk', title: 'Julieta Venegas - Limon Y Sal' }, { id: 'QQcQDbpDH_o', title: 'Cinema - Skrillex' }, { id: 'MzNWX0xL3mA', title: 'We Become We - Journey To Bethlehem' }, { id: 'D4bKwi7gRUA', title: 'Koino Yokan - Lo Que Va A Venir' }];
+        const playlistStardew = [{ id: 'JJCFQtTPq_8', title: 'Stardew Valley OST (Relaxing)' }, { id: '2NihzptRjto', title: 'Infinity Castle Theme | Demon slayer' }, { id: 'faqmNf_fZlE', title: 'Hunter X Hunter Opening 1 | Departure!' }, { id: 'ih2BwMX_ilI', title: 'Hunter x Hunter Ending | 2' }, { id: 'HBAmFuEWPhE', title: 'Hunter x Hunter Ending l 6' }, { id: 'st4wcpjZeQQ', title: 'Demon Slayer - Opening 3' }, { id: 'g3HIQ0gdzYc', title: 'Hunter x Hunter Ending | 5' }, { id: 'IVBU9ymY', title: 'Hunter x Hunter Ending | 4' }];
 
         let currentPlaylist = playlistNormal;
         let isStardewMode = false;
+
+        /* --- LÓGICA DEL PERRO (Inteligencia Artificial Canina) --- */
+        const dog = document.getElementById('stardew-dog');
+        let dogState = 'sit'; // Estados posibles: 'sit', 'walk', 'sleep'
+        let dogPos = 10; // Posición actual (% desde la izquierda)
+        let targetPos = 10; // Posición a donde quiere ir
+        let isMoving = false;
+
+        // Esta función es el "cerebro" del perro, se ejecuta cada segundo
+        function updateDogAI() {
+            if (!isStardewMode) return; // Si no estamos en modo Stardew, el perro no piensa
+
+            // Si está durmiendo, hay poca chance de que se despierte solo
+            if (dogState === 'sleep') {
+                if (Math.random() > 0.98) changeDogState('sit'); // 2% chance de despertar
+                return;
+            }
+
+            // Si está sentado y quieto, decide qué hacer
+            if (dogState === 'sit' && !isMoving) {
+                const rand = Math.random();
+                if (rand < 0.02) {
+                    // 2% chance de irse a dormir
+                    changeDogState('sleep');
+                } else if (rand < 0.08) {
+                    // 6% chance de empezar a caminar
+                    // Elige un punto al azar entre el 5% y el 85% del ancho de la pantalla
+                    targetPos = Math.random() * 80 + 5; 
+                    changeDogState('walk');
+                    isMoving = true;
+                    moveDog();
+                }
+            }
+        }
+
+        // Función para mover físicamente al perro
+        function moveDog() {
+            if (dogState !== 'walk' || !isMoving) return;
+
+            const direction = targetPos > dogPos ? 1 : -1; // 1 = derecha, -1 = izquierda
+            
+            // Voltear el sprite según la dirección
+            if (direction === 1) dog.classList.remove('dog-flip');
+            else dog.classList.add('dog-flip');
+
+            // CSS transition se encarga del movimiento suave, solo seteamos la nueva posición
+            dog.style.left = targetPos + 'vw';
+            dogPos = targetPos;
+
+            // Después de 3 segundos (lo que dura la transición CSS), se detiene y se sienta
+            setTimeout(() => {
+                isMoving = false;
+                changeDogState('sit');
+            }, 3000);
+        }
+
+        // Función para cambiar el estado y la animación del perro
+        function changeDogState(newState) {
+            dogState = newState;
+            // Borramos clases viejas y ponemos la nueva
+            dog.className = ''; 
+            if (isMoving && targetPos < dogPos) dog.classList.add('dog-flip'); // Mantener volteado si caminaba
+            dog.classList.add('dog-state-' + newState);
+        }
+
+        // INTERACCIÓN: Qué pasa si le haces click al perro
+        dog.addEventListener('click', () => {
+            if (dogState === 'sleep') {
+                changeDogState('sit'); // Despertar
+            } else if (dogState === 'walk') {
+                 // Detener la caminata abruptamente donde esté
+                 const computedStyle = window.getComputedStyle(dog);
+                 // Calcular posición actual real en pantalla y convertir a porcentaje
+                 dogPos = parseFloat(computedStyle.left) / window.innerWidth * 100;
+                 dog.style.left = dogPos + 'vw';
+                 isMoving = false;
+                 changeDogState('sit');
+            }
+            // (Opcional: aquí podrías agregar un sonido de ladrido)
+        });
+
+        // Activar el cerebro del perro cada 1000ms (1 segundo)
+        setInterval(updateDogAI, 1000);
+
 
         /* --- LOGICA DOBLE MUNDO --- */
         function cambiarModo() {
@@ -455,229 +524,80 @@ Sos mi negrita hermosa y te elijo todos los días.
             const sticker2 = document.getElementById("sticker2");
             const galleryNormal = document.getElementById("gallery-normal");
             const galleryStardew = document.getElementById("gallery-stardew");
-            
-            // Referencias a los titulos de la radio
             const radioTitle = document.getElementById("radio-title");
             const radioSubtitle = document.getElementById("radio-subtitle");
 
             isStardewMode = !isStardewMode;
 
             if (isStardewMode) {
-                // ACTIVAR MODO STARDEW
                 body.classList.add("stardew-mode");
                 btn.innerText = "🎀 Volver a la Normalidad";
-                sticker1.innerText = "⭐";
-                sticker2.innerText = "💙";
-                galleryNormal.style.display = "none";
-                galleryStardew.style.display = "flex";
-                
-                // CAMBIAR TEXTO DE LA RADIO PARA STARDEW
-                radioTitle.innerText = "RADIO STARDEW 🐔";
-                radioSubtitle.innerText = "Musiquita para la granja";
-                
+                sticker1.innerText = "⭐"; sticker2.innerText = "💙";
+                galleryNormal.style.display = "none"; galleryStardew.style.display = "flex";
+                radioTitle.innerText = "RADIO STARDEW 🐔"; radioSubtitle.innerText = "Musiquita para la granja";
                 currentPlaylist = playlistStardew;
-                currentIdx = 0;
-                if(player) player.loadVideoById(currentPlaylist[0].id);
+                // Asegurar que el perro empiece sentado al cambiar de modo
+                changeDogState('sit'); isMoving = false;
 
             } else {
-                // VOLVER MODO NORMAL
                 body.classList.remove("stardew-mode");
                 btn.innerText = "🌾 Modo Stardew";
-                sticker1.innerText = "🎀";
-                sticker2.innerText = "🎀";
-                galleryNormal.style.display = "flex";
-                galleryStardew.style.display = "none";
-                
-                // CAMBIAR TEXTO DE LA RADIO PARA MODO AMOR
-                radioTitle.innerText = "LA RADIO DEL AMOR 📻";
-                radioSubtitle.innerText = "te dedico todas amor";
-                
+                sticker1.innerText = "🎀"; sticker2.innerText = "🎀";
+                galleryNormal.style.display = "flex"; galleryStardew.style.display = "none";
+                radioTitle.innerText = "LA RADIO DEL AMOR 📻"; radioSubtitle.innerText = "te dedico todas amor";
                 currentPlaylist = playlistNormal;
-                currentIdx = 0;
-                if(player) player.loadVideoById(currentPlaylist[0].id);
             }
+            currentIdx = 0; if(player) player.loadVideoById(currentPlaylist[0].id);
             updatePlayerUI();
         }
 
-        /* --- OBJETOS LATERALES --- */
-        function iniciarSideItems() { setInterval(crearSideItem, 800); }
-        
-        // LISTA COMPLETA DE EMOJIS PARA EL FONDO Y LOS LATERALES
-        const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋", "🌸", "🌹", "🌷", "💐", "❤️", "🧡", "💛", "💚", "💙", "💜", "🤍"];
-        const emojisStardew = ["🌾", "🐔", "⭐", "🍄", "🌲"];
-
-        function crearSideItem() {
-            const container = document.getElementById("side-items-container");
-            const item = document.createElement("div"); item.classList.add("side-item");
-            
-            if (isStardewMode) {
-                item.innerText = emojisStardew[Math.floor(Math.random() * emojisStardew.length)];
-            } else {
-                item.innerText = emojisNormal[Math.floor(Math.random() * emojisNormal.length)];
-            }
-
-            const lado = Math.random() > 0.5 ? "left" : "right";
-            if (lado === "left") item.style.left = (Math.random() * 10 + 2) + "vw"; 
-            else item.style.left = (Math.random() * 10 + 85) + "vw"; 
-            item.style.animationDuration = (Math.random() * 5 + 5) + "s"; 
-            item.onclick = function(e) {
-                lanzarConfeti(e.clientX, e.clientY); 
-                item.style.transform = "scale(1.5)"; item.style.opacity = "0";
-                setTimeout(() => item.remove(), 200); 
-            };
-            container.appendChild(item); setTimeout(() => { item.remove(); }, 10000);
-        }
-
-
-        /* --- FUNCIONES GENERALES --- */
-        // FUNCIÓN VERIFICAR FECHA (para los 3 inputs)
+        /* --- FUNCIONES GENERALES (Fecha, Carta, Emojis, etc.) --- */
         function verificarFecha() {
-            let dia = document.getElementById("input-dia").value;
-            let mes = document.getElementById("input-mes").value;
+            let dia = document.getElementById("input-dia").value.padStart(2, '0');
+            let mes = document.getElementById("input-mes").value.padStart(2, '0');
             const anio = document.getElementById("input-anio").value;
-            const error = document.getElementById("mensaje-error");
-
-            // Asegurar que día y mes tengan 2 dígitos (ej: convierte "5" en "05")
-            dia = dia.padStart(2, '0');
-            mes = mes.padStart(2, '0');
-
-            const fechaIngresada = `${dia}/${mes}/${anio}`;
-
-            if (fechaIngresada === fechaCorrecta) {
+            if (`${dia}/${mes}/${anio}` === fechaCorrecta) {
                 document.getElementById("pantalla-bloqueo").style.opacity = "0";
-                
-                // MOSTRAR EL BOTÓN DE MODO SUAVEMENTE
                 const btnMode = document.getElementById("btn-toggle-mode");
-                btnMode.style.opacity = "1";
-                btnMode.style.pointerEvents = "auto";
-
+                btnMode.style.opacity = "1"; btnMode.style.pointerEvents = "auto";
                 setTimeout(() => {
                     document.getElementById("pantalla-bloqueo").style.display = "none";
                     document.getElementById("contenido-principal").style.opacity = "1";
-                    iniciarMecanografia();
-                    if(player) player.playVideo();
-                    iniciarSideItems();
-                    // crearCorazones() YA NO SE LLAMA AQUI PORQUE YA ESTA CORRIENDO DESDE EL PRINCIPIO
-                    calcularProximasFechas();
+                    iniciarMecanografia(); if(player) player.playVideo();
+                    iniciarSideItems(); calcularProximasFechas();
                 }, 1000);
-            } else {
-                error.style.display = "block";
-            }
+            } else { document.getElementById("mensaje-error").style.display = "block"; }
         }
 
-        let charIndex = 0;
-        function iniciarMecanografia() {
-            if (charIndex < mensajeCarta.length) {
-                const char = mensajeCarta.charAt(charIndex);
-                if (char === '\n') document.getElementById("cuerpo-carta").innerHTML += '<br>';
-                else document.getElementById("cuerpo-carta").innerHTML += char;
-                charIndex++; setTimeout(iniciarMecanografia, 50);
-            } else { document.getElementById("cursor-carta").style.display = "none"; }
-        }
+        let charIndex = 0; function iniciarMecanografia() { if (charIndex < mensajeCarta.length) { const char = mensajeCarta.charAt(charIndex); document.getElementById("cuerpo-carta").innerHTML += char === '\n' ? '<br>' : char; charIndex++; setTimeout(iniciarMecanografia, 50); } else { document.getElementById("cursor-carta").style.display = "none"; } }
 
-        // FUNCIÓN PARA EMOJIS VARIADOS EN EL FONDO
+        const emojisNormal = ["🎈", "🧸", "🌻", "💖", "🍦", "✨", "🦋", "🌸", "🌹", "🌷", "💐", "❤️", "🧡", "💛", "💚", "💙", "💜", "🤍"];
+        const emojisStardew = ["🌾", "🐔", "⭐", "🍄", "🌲"];
+        function iniciarSideItems() { setInterval(crearSideItem, 800); }
+        function crearSideItem() {
+            const container = document.getElementById("side-items-container"); const item = document.createElement("div"); item.classList.add("side-item");
+            item.innerText = isStardewMode ? emojisStardew[Math.floor(Math.random() * emojisStardew.length)] : emojisNormal[Math.floor(Math.random() * emojisNormal.length)];
+            item.style.left = (Math.random() > 0.5 ? Math.random() * 10 + 2 : Math.random() * 10 + 85) + "vw";
+            item.style.animationDuration = (Math.random() * 5 + 5) + "s";
+            item.onclick = function(e) { lanzarConfeti(e.clientX, e.clientY); item.style.transform = "scale(1.5)"; item.style.opacity = "0"; setTimeout(() => item.remove(), 200); };
+            container.appendChild(item); setTimeout(() => { item.remove(); }, 10000);
+        }
         function crearCorazones() {
-            const container = document.getElementById("hearts-container");
-            container.innerHTML = "";
-            const listaEmojis = emojisNormal;
-
-            for (let i = 0; i < 30; i++) { 
-                const heart = document.createElement("div"); heart.classList.add("heart-bg");
-                heart.innerHTML = listaEmojis[Math.floor(Math.random() * listaEmojis.length)];
-                heart.style.left = Math.random() * 95 + "vw"; heart.style.top = Math.random() * 95 + "vh";
-                heart.style.fontSize = (Math.random() * 2 + 1) + "rem";
-                heart.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out alternate`;
-                heart.onclick = function(e) {
-                    lanzarConfeti(e.clientX, e.clientY);
-                    this.style.opacity = "0"; setTimeout(() => this.remove(), 500);
-                };
-                container.appendChild(heart);
-            }
+            const container = document.getElementById("hearts-container"); container.innerHTML = "";
+            for (let i = 0; i < 30; i++) { const heart = document.createElement("div"); heart.classList.add("heart-bg"); heart.innerHTML = emojisNormal[Math.floor(Math.random() * emojisNormal.length)]; heart.style.left = Math.random() * 95 + "vw"; heart.style.top = Math.random() * 95 + "vh"; heart.style.fontSize = (Math.random() * 2 + 1) + "rem"; heart.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out alternate`; heart.onclick = function(e) { lanzarConfeti(e.clientX, e.clientY); this.style.opacity = "0"; setTimeout(() => this.remove(), 500); }; container.appendChild(heart); }
         }
+        function lanzarConfeti(x, y) { const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500']; if (!x) x = window.innerWidth / 2; if (!y) y = window.innerHeight / 2; for (let j = 0; j < 20; j++) { const confeti = document.createElement('div'); confeti.classList.add('confetti'); confeti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]; confeti.style.left = x + 'px'; confeti.style.top = y + 'px'; const dirX = (Math.random() - 0.5) * 200 + 'px'; const dirY = (Math.random() - 1) * 200 + 'px'; confeti.style.setProperty('--x', dirX); confeti.style.setProperty('--y', dirY); confeti.style.animation = `pop ${Math.random() * 0.5 + 0.5}s ease-out forwards`; document.body.appendChild(confeti); setTimeout(() => { confeti.remove(); }, 1000); } }
+        function lanzarSorpresa() { lanzarFrase(); lanzarConfeti(window.innerWidth/2, window.innerHeight * 0.8); }
+        function lanzarFrase() { const container = document.getElementById("frase-flotante-container"); const el = document.createElement("div"); el.classList.add("frase-flotante"); el.innerText = frases[Math.floor(Math.random() * frases.length)]; el.style.left = (Math.random() * 30 - 15) + "%"; el.style.top = "60%"; container.appendChild(el); setTimeout(() => { el.remove(); }, 4000); }
+        function calcularProximasFechas() { const lista = document.getElementById("lista-fechas"); lista.innerHTML = ""; const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; let hoy = new Date(); for(let i = 0; i < 4; i++) { let mesActual = hoy.getMonth() + i; let anioActual = hoy.getFullYear(); if (mesActual > 11) { mesActual -= 12; anioActual++; } let fechaFutura = new Date(anioActual, mesActual, 5); if (fechaFutura < new Date()) fechaFutura = new Date(anioActual, mesActual + 1, 5); const item = document.createElement("li"); item.classList.add("date-item"); item.innerHTML = `<span>5 de ${meses[fechaFutura.getMonth()]}</span> <span style="font-weight:bold; color:var(--primary-color)">${dias[fechaFutura.getDay()]}</span>`; lista.appendChild(item); } }
+        function generarCita() { const display = document.getElementById("idea-display"); display.style.opacity = 0; setTimeout(() => { display.innerText = ideasCitas[Math.floor(Math.random() * ideasCitas.length)]; display.style.opacity = 1; }, 200); }
+        const fechaInicio = new Date("2023-03-05T00:00:00"); function actualizarContador() { const ahora = new Date(); const diferencia = ahora - fechaInicio; const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)); const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60)); const segundos = Math.floor((diferencia % (1000 * 60)) / 1000); const anios = Math.floor(dias / 365); const diasRestantes = dias % 365; document.getElementById("contador").innerHTML = `LLEVAMOS: ${anios} AÑOS, ${diasRestantes} DÍAS, ${horas} HS, ${minutos} MIN Y ${segundos} SEG`; } setInterval(actualizarContador, 1000); crearCorazones();
 
-        function lanzarConfeti(x, y) {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
-            if (!x) x = window.innerWidth / 2; if (!y) y = window.innerHeight / 2;
-            for (let j = 0; j < 20; j++) {
-                const confeti = document.createElement('div'); confeti.classList.add('confetti');
-                confeti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confeti.style.left = x + 'px'; confeti.style.top = y + 'px';
-                const dirX = (Math.random() - 0.5) * 200 + 'px'; const dirY = (Math.random() - 1) * 200 + 'px';
-                confeti.style.setProperty('--x', dirX); confeti.style.setProperty('--y', dirY);
-                confeti.style.animation = `pop ${Math.random() * 0.5 + 0.5}s ease-out forwards`;
-                document.body.appendChild(confeti); setTimeout(() => { confeti.remove(); }, 1000);
-            }
-        }
-
-        function lanzarSorpresa() {
-            lanzarFrase(); 
-            lanzarConfeti(window.innerWidth/2, window.innerHeight * 0.8);
-        }
-        
-        function lanzarFrase() {
-            const container = document.getElementById("frase-flotante-container");
-            const el = document.createElement("div"); el.classList.add("frase-flotante");
-            el.innerText = frases[Math.floor(Math.random() * frases.length)];
-            
-            // AQUI ESTA EL CAMBIO: Centrado con un poquito de movimiento aleatorio (-15% a +15%)
-            el.style.left = (Math.random() * 30 - 15) + "%";
-            
-            el.style.top = "60%";
-            container.appendChild(el); setTimeout(() => { el.remove(); }, 4000);
-        }
-
-        function calcularProximasFechas() {
-            const lista = document.getElementById("lista-fechas");
-            lista.innerHTML = "";
-            const diaAniversario = 5; 
-            const mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-            let hoy = new Date();
-            for(let i = 0; i < 4; i++) {
-                let mesActual = hoy.getMonth() + i; let anioActual = hoy.getFullYear();
-                if (mesActual > 11) { mesActual -= 12; anioActual++; }
-                let fechaFutura = new Date(anioActual, mesActual, diaAniversario);
-                if (fechaFutura < new Date()) fechaFutura = new Date(anioActual, mesActual + 1, diaAniversario);
-                const item = document.createElement("li"); item.classList.add("date-item");
-                item.innerHTML = `<span>5 de ${mesesNombres[fechaFutura.getMonth()]}</span> <span style="font-weight:bold; color:var(--primary-color)">${diasSemana[fechaFutura.getDay()]}</span>`;
-                lista.appendChild(item);
-            }
-        }
-
-        function generarCita() {
-            const display = document.getElementById("idea-display"); display.style.opacity = 0;
-            setTimeout(() => { display.innerText = ideasCitas[Math.floor(Math.random() * ideasCitas.length)]; display.style.opacity = 1; }, 200);
-        }
-        
-        const fechaInicio = new Date("2023-03-05T00:00:00"); 
-        function actualizarContador() {
-            const ahora = new Date(); const diferencia = ahora - fechaInicio;
-            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-            const anios = Math.floor(dias / 365); const diasRestantes = dias % 365;
-            document.getElementById("contador").innerHTML = `LLEVAMOS: ${anios} AÑOS, ${diasRestantes} DÍAS, ${horas} HS, ${minutos} MIN Y ${segundos} SEG`;
-        }
-        setInterval(actualizarContador, 1000);
-
-        // ARRANCAMOS LA FIESTA DE EMOJIS DESDE EL PRINCIPIO
-        crearCorazones();
-
+        /* --- YOUTUBE API --- */
         let player; let currentIdx = 0; let isPlaying = false;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '1', width: '1', videoId: currentPlaylist[currentIdx].id,
-                playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin },
-                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
-            });
-        }
+        function onYouTubeIframeAPIReady() { player = new YT.Player('youtube-player', { height: '1', width: '1', videoId: currentPlaylist[currentIdx].id, playerVars: { 'autoplay': 0, 'controls': 0, 'origin': window.location.origin }, events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange } }); }
         function onPlayerReady(event) { updatePlayerUI(); player.setVolume(50); }
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) nextSong();
-            if (event.data === YT.PlayerState.PLAYING) { isPlaying = true; document.getElementById("play-btn").innerText = "⏸️"; }
-            if (event.data === YT.PlayerState.PAUSED) { isPlaying = false; document.getElementById("play-btn").innerText = "▶️"; }
-        }
+        function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) nextSong(); if (event.data === YT.PlayerState.PLAYING) { isPlaying = true; document.getElementById("play-btn").innerText = "⏸️"; } if (event.data === YT.PlayerState.PAUSED) { isPlaying = false; document.getElementById("play-btn").innerText = "▶️"; } }
         function updatePlayerUI() { document.getElementById("current-song-title").innerText = currentPlaylist[currentIdx].title; }
         function togglePlay() { if (player) { if (isPlaying) player.pauseVideo(); else player.playVideo(); } }
         function nextSong() { currentIdx++; if (currentIdx >= currentPlaylist.length) currentIdx = 0; if(player) player.loadVideoById(currentPlaylist[currentIdx].id); updatePlayerUI(); }

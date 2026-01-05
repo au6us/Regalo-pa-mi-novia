@@ -45,7 +45,11 @@
         body {
             font-family: var(--font-main);
             text-align: center; margin: 0; padding: 0;
-            overflow-x: hidden; color: var(--text-color); padding-bottom: 120px;
+            overflow-x: hidden; color: var(--text-color); 
+            
+            /* --- CAMBIO AQUI: MAS AIRE ABAJO --- */
+            padding-bottom: 300px; 
+            
             cursor: var(--cursor);
             position: relative; 
             background-color: var(--bg-color);
@@ -72,7 +76,7 @@
         body.stardew-mode .bg-tunnel { opacity: 0; }
         body.stardew-mode .bg-stardew { opacity: 1; }
 
-        /* --- BOTÓN DE MODO (MODIFICADO PARA ESTAR OCULTO AL INICIO) --- */
+        /* --- BOTÓN DE MODO (OCULTO AL INICIO) --- */
         #btn-toggle-mode {
             position: fixed; top: 20px; left: 20px; z-index: 2000;
             background: white; border: 2px solid #5a2a2a;
@@ -80,7 +84,6 @@
             font-family: 'Fredoka', sans-serif; font-weight: bold;
             box-shadow: 0 4px 0 #5a2a2a; 
             
-            /* MODIFICACIÓN: Se agrega transición de opacidad y se oculta inicialmente */
             transition: transform 0.1s, opacity 2s ease;
             opacity: 0; pointer-events: none;
         }

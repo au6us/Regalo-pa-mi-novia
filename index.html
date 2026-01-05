@@ -258,6 +258,11 @@
         <div id="youtube-player"></div>
 
         <div id="music-player-box">
+            <div id="radio-header" style="margin-bottom: 10px; border-bottom: 2px dashed var(--primary-color); padding-bottom: 5px;">
+                <div id="radio-title" style="font-weight:bold; font-size: 1.1rem; color: var(--primary-color); text-transform: uppercase;">LA RADIO DEL AMOR 📻</div>
+                <div id="radio-subtitle" style="font-size: 0.8rem; font-style: italic;">te dedico todas amor</div>
+            </div>
+
             <span class="song-title" id="current-song-title">Cargando música...</span>
             <div class="controls">
                 <button class="ctrl-btn" onclick="prevSong()">⏮️</button>
@@ -389,6 +394,8 @@ Sos mi negrita hermosa y te elijo todos los días.
             { id: 'MzNWX0xL3mA', title: 'We Become We - Journey To Bethlehem' },
             { id: 'D4bKwi7gRUA', title: 'Koino Yokan - Lo Que Va A Venir' }
         ];
+        
+        // --- LISTA STARDEW CON COMAS ARREGLADAS ---
         const playlistStardew = [
             { id: 'JJCFQtTPq_8', title: 'Stardew Valley OST (Relaxing)' }, 
             { id: '2NihzptRjto', title: 'Infinity Castle Theme | Demon slayer' }, 
@@ -397,7 +404,7 @@ Sos mi negrita hermosa y te elijo todos los días.
             { id: 'HBAmFuEWPhE', title: 'Hunter x Hunter Ending l 6' },
             { id: 'st4wcpjZeQQ', title: 'Demon Slayer - Opening 3' }, 
             { id: 'g3HIQ0gdzYc', title: 'Hunter x Hunter Ending | 5' }, 
-            { id: 'IVBU9ymY', title: 'Hunter x Hunter Ending | 4' }, 
+            { id: 'IVBU9ymY', title: 'Hunter x Hunter Ending | 4' }
         ];
 
         let currentPlaylist = playlistNormal;
@@ -411,6 +418,10 @@ Sos mi negrita hermosa y te elijo todos los días.
             const sticker2 = document.getElementById("sticker2");
             const galleryNormal = document.getElementById("gallery-normal");
             const galleryStardew = document.getElementById("gallery-stardew");
+            
+            // Referencias a los titulos de la radio
+            const radioTitle = document.getElementById("radio-title");
+            const radioSubtitle = document.getElementById("radio-subtitle");
 
             isStardewMode = !isStardewMode;
 
@@ -422,6 +433,10 @@ Sos mi negrita hermosa y te elijo todos los días.
                 sticker2.innerText = "💙";
                 galleryNormal.style.display = "none";
                 galleryStardew.style.display = "flex";
+                
+                // CAMBIAR TEXTO DE LA RADIO PARA STARDEW
+                radioTitle.innerText = "RADIO STARDEW 🐔";
+                radioSubtitle.innerText = "Musiquita para la granja";
                 
                 currentPlaylist = playlistStardew;
                 currentIdx = 0;
@@ -435,6 +450,10 @@ Sos mi negrita hermosa y te elijo todos los días.
                 sticker2.innerText = "🎀";
                 galleryNormal.style.display = "flex";
                 galleryStardew.style.display = "none";
+                
+                // CAMBIAR TEXTO DE LA RADIO PARA MODO AMOR
+                radioTitle.innerText = "LA RADIO DEL AMOR 📻";
+                radioSubtitle.innerText = "te dedico todas amor";
                 
                 currentPlaylist = playlistNormal;
                 currentIdx = 0;
@@ -602,6 +621,3 @@ Sos mi negrita hermosa y te elijo todos los días.
     </script>
 </body>
 </html>
-
-
-
